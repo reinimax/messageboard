@@ -9,9 +9,46 @@ class Application
      */
     protected $routes = [];
 
-    public function __construct()
+    /**
+     * Get the route that was entered and the method and call the corresponding controller with the approriate method
+     */
+    public function run()
     {
-        echo 'Application constructed';
+        // get the method
+        $method = $this->getMethod();
+        // get the route
+        $route = $this->getRoute();
+        // call the approritate controller
+        if (isset($this->routes[$method][$route])) {
+            if (class_exists($this->routes[$method][$route][0])) {
+                $controller = new $this->routes[$method][$route][0]();
+                // call the method of the controller
+                $controller->{$this->routes[$method][$route][1]}();
+            } else {
+                // handle error
+                echo 'Controller not found';
+            }
+        } else {
+            // handle error
+            echo 'Method/Route not found';
+        }
+    }
+
+    protected function getMethod()
+    {
+        return strtolower($_SERVER['REQUEST_METHOD']);
+    }
+
+    /**
+     * Get the route
+     * @return string The route without extension and query string
+     */
+    protected function getRoute()
+    {
+        $route = $_SERVER['REQUEST_URI'];
+        $info = pathinfo($route);
+        $path = $info['dirname'].'/'.$info['filename'];
+        return str_replace('\\', '', $path);
     }
 
     /**
