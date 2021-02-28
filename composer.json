@@ -1,0 +1,14 @@
+{
+    "name": "reinimax/messageboard",
+    "description": "A message board",
+    "authors": [
+        {
+            "name": "Reinhold Schachner",
+            "email": "reinhold.schachner@hotmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {"app\\": "app/"}
+    }   
+}
