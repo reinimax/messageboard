@@ -6,6 +6,8 @@ class PostController
 {
     public function index()
     {
-        echo 'Postcontroller->index()';
+        // call model and retrieve data
+        // return the data to application
+        return ['index', 'This is the index'];
     }
 }

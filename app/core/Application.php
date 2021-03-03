@@ -8,6 +8,12 @@ class Application
      * A multi-dimensional associative array. The first key corresponds to the method, the second key corresponds to the path
      */
     protected $routes = [];
+    protected $view;
+
+    public function __construct()
+    {
+        $this->view = new View();
+    }
 
     /**
      * Get the route that was entered and the method and call the corresponding controller with the approriate method
@@ -23,7 +29,8 @@ class Application
             if (class_exists($this->routes[$method][$route][0])) {
                 $controller = new $this->routes[$method][$route][0]();
                 // call the method of the controller
-                $controller->{$this->routes[$method][$route][1]}();
+                $result = $controller->{$this->routes[$method][$route][1]}();
+                $this->view->render($result);
             } else {
                 // handle error
                 echo 'Controller not found';
