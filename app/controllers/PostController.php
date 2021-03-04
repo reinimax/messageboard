@@ -16,6 +16,11 @@ class PostController
     public function index()
     {
         // call model and return the retrieved data
-        return $this->model->index();
+        $data = $this->model->index();
+        return [
+            'title' => 'Index',
+            'content' => 'index.php',
+            'data' => $data
+        ];
     }
 }

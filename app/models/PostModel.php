@@ -20,6 +20,7 @@ class PostModel
     public function index()
     {
         // test
-        return ['index', 'This is the index'];
+        $test = 'I\'m a test!';
+        return $test;
     }
 }
