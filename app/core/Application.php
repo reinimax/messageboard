@@ -29,15 +29,42 @@ class Application
             if (class_exists($this->routes[$method][$route][0])) {
                 $controller = new $this->routes[$method][$route][0]();
                 // call the method of the controller
-                $result = $controller->{$this->routes[$method][$route][1]}();
-                $this->view->render($result);
+                try {
+                    $result = $controller->{$this->routes[$method][$route][1]}();
+                    $this->view->render($result);
+                } catch (\Error $e) {
+                    $title = 'Error '.$e->getCode();
+                    $message = $e->getMessage();
+                    $this->view->render([
+                        'title' => 'Error',
+                        'content' => 'error.php',
+                        'data' => [
+                            'error' => $title,
+                            'errormsg' => $message
+                        ]
+                    ]);
+                }
             } else {
                 // handle error
-                echo 'Controller not found';
+                $this->view->render([
+                    'title' => 'Error',
+                    'content' => 'error.php',
+                    'data' => [
+                        'error' => 'Controller not found',
+                        'errormsg' => 'The controller for this route was not found'
+                    ]
+                ]);
             }
         } else {
             // handle error
-            echo 'Method/Route not found';
+            $this->view->render([
+                'title' => 'Error',
+                'content' => 'error.php',
+                'data' => [
+                    'error' => 'Method/Route not found',
+                    'errormsg' => 'The method or the route was not found'
+                ]
+            ]);
         }
     }
 

@@ -13,9 +13,14 @@ class View
     public function render($data)
     {
         $template = $this->getTemplate();
-        $title = $data['title'] ?? 'Messageboard';
-        $receivedData = $data['data'] ?? '';
-        $content = $this->getView($data['content'], $receivedData);
+        if (!isset($data['content']) || !file_exists(ROOT.'/views/'.$data['content'])) {
+            $title = '404 Not found';
+            $content = $this->getView('error.php', '');
+        } else {
+            $title = $data['title'] ?? 'Messageboard';
+            $receivedData = $data['data'] ?? '';
+            $content = $this->getView($data['content'], $receivedData);
+        }
         $output = str_replace(['{title}', '{content}'], [$title, $content], $template);
         echo $output;
     }
