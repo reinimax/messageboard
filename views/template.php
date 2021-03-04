@@ -1,3 +1,8 @@
+<?php
+
+use app\lib\Session;
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +12,13 @@
     <title>{title}</title>
 </head>
 <body>
-<?php require_once ROOT.'/views/inc/nav.php'; ?>  
+<?php
+if (Session::init()->checkLogin()) {
+    require_once ROOT.'/views/inc/nav_user.php';
+} else {
+    require_once ROOT.'/views/inc/nav.php';
+}
+?>  
 {content} 
 </body>
 </html>
