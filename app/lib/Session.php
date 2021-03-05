@@ -19,10 +19,29 @@ class Session
         if (self::$session === null) {
             self::$session = new Session();
         }
-        if (session_id() === '') {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
             session_start();
         }
         return self::$session;
+    }
+
+    /**
+     * Sets a CSRF Token
+     * @return string The CSRF Token
+     */
+    public function setCsrfToken()
+    {
+        $_SESSION['_token'] = bin2hex(random_bytes(32));
+        return $_SESSION['_token'];
+    }
+
+    /**
+     * Gets the CSRF Token
+     * @return string The CSRF Token
+     */
+    public function getCsrfToken()
+    {
+        return $_SESSION['_token'];
     }
 
     /**
