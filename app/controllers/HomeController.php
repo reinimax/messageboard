@@ -93,4 +93,78 @@ class HomeController
             ];
         }
     }
+
+    public function login()
+    {
+        if (!empty($_POST)) {
+            if (hash_equals(Session::init()->getCsrfToken(), $_POST['_token'])) {
+                // Validation
+                $gump = new \GUMP();
+
+                $gump->filter_rules([
+                    'user' => 'trim|sanitize_string',
+                    'pwd' => 'trim|sanitize_string'
+                ]);
+
+                if (strpos($_POST['user'], '@') === false) {
+                    $validation = 'required';
+                    $isEmail = false;
+                } else {
+                    $validation = 'required|valid_email';
+                    $isEmail = true;
+                }
+
+                $gump->validation_rules([
+                    'user' => $validation,
+                    'pwd' => 'required'
+                ]);
+
+                $gump->set_fields_error_messages([
+                    'pwd' => ['required' => 'Please enter your password']
+                ]);
+
+                $valid_data = $gump->run($_POST);
+
+                if ($gump->errors()) {
+                    $errors = $gump->get_errors_array();
+                    return [
+                    'title' => 'Login',
+                    'content' => 'login.php',
+                    'data' => ['errors' => $errors]
+                ];
+                } else {
+                    // Log the user in
+                    $result = $this->model->login($valid_data, $isEmail);
+                    if ($result === false) {
+                        return [
+                            'title' => 'Login',
+                            'content' => 'login.php',
+                            'data' => ['error' => 'Login not correct']
+                        ];
+                    } else {
+                        $_POST = [];
+                        Session::init()->setLogin(['user' => $result]);
+                        return [
+                            'title' => 'Login successful',
+                            'content' => 'index.php',
+                            'data' => 'Successfully logged in'
+                        ];
+                    }
+                }
+            } else {
+                // if CSRF Validation failed
+                return [
+                    'title' => 'Login',
+                    'content' => 'login.php',
+                    'data' => ['error' => 'Login failed']
+                ];
+            }
+        } else {
+            // if $_POST is empty
+            return [
+                'title' => 'Login',
+                'content' => 'login.php'
+            ];
+        }
+    }
 }
