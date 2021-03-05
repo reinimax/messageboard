@@ -172,6 +172,9 @@ class HomeController
         }
     }
 
+    /**
+     * Logs the user out
+     */
     public function logout()
     {
         Session::init()->destroySession();
