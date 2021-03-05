@@ -1,5 +1,14 @@
+<?php
+use app\lib\Session;
+
+?>
 <form action="/register.php" method="POST" class="needs-validation border border-primary mx-auto w-50 p-4" novalidate>
     <h1 class="text-center">Register</h1>
+    <?php
+    if (isset($data['error'])) {
+        echo '<div class="alert alert-danger">'.$data['error'].'</div>';
+    }
+    ?>
     <div class="form-group">
         <label for="user">Username *
         <span class="small">(Only alpha-numeric, underscores and dashes)</span>
@@ -26,6 +35,7 @@
         <label for="pwdrepeat">Repeat password *</label>
         <input type="password" class="form-control" id="pwdrepeat" name="pwdrepeat" required>
     </div>
+    <input type="hidden" name="_token" value="<?php echo Session::init()->setCsrfToken(); ?>">
     <div class="form-group">
         <input type="submit" class="btn btn-primary w-100" value="Register">
     </div>
