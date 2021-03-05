@@ -171,4 +171,11 @@ class HomeController
             ];
         }
     }
+
+    public function logout()
+    {
+        Session::init()->destroySession();
+        header('Location:/');
+        exit;
+    }
 }
