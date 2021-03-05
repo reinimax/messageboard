@@ -3,9 +3,21 @@
 namespace app\controllers;
 
 use app\lib\Session;
+use app\models\HomeModel;
 
 class HomeController
 {
+    protected $model;
+
+    public function __construct()
+    {
+        $this->model = new HomeModel();
+    }
+
+    /**
+     * Opens the registration form, validates form entries and saves the new user in the DB
+     * @return array View and data to be rendered
+     */
     public function register()
     {
         if (!empty($_POST)) {
@@ -48,13 +60,22 @@ class HomeController
                     'data' => ['errors' => $errors]
                 ];
                 } else {
-                    // call to model to save the user data in the DB
-                    $_POST = [];
-                    return [
-                        'title' => 'Successfully registered',
-                        'content' => 'index.php',
-                        'data' => 'You are now part of the messageboard!'
-                    ];
+                    // Save the new user in the DB
+                    $result = $this->model->register($valid_data);
+                    if (isset($result['error'])) {
+                        return [
+                            'title' => 'Register',
+                            'content' => 'register.php',
+                            'data' => $result
+                        ];
+                    } else {
+                        $_POST = [];
+                        return [
+                            'title' => 'Successfully registered',
+                            'content' => 'index.php',
+                            'data' => $result['success']
+                        ];
+                    }
                 }
             } else {
                 // if CSRF Validation failed
