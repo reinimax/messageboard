@@ -43,4 +43,48 @@ class HomeModel
         }
         return ['success' => 'You are now part of the messageboard!'];
     }
+
+    /**
+     * Checks username and password against the DB
+     * @param array $data The validated data from the login form
+     * @param bool $isEmail If TRUE the method checks for the email, if FALSE it checks for the username
+     * @return array/bool Returns the username if username and password are correct, FALSE otherwise
+     */
+    public function login($data, $isEmail)
+    {
+        // Cehck if username or email exists
+        $loginUserName = <<<SQL
+            SELECT user, email, pwd FROM users WHERE user=:user;
+        SQL;
+
+        $loginUserEmail = <<<SQL
+            SELECT user, email, pwd FROM users WHERE email=:user;
+        SQL;
+
+        try {
+            if ($isEmail) {
+                $statement = $this->pdo->prepare($loginUserEmail);
+            } else {
+                $statement = $this->pdo->prepare($loginUserName);
+            }
+            $statement->bindParam(':user', $data['user'], PDO::PARAM_STR);
+            $statement->execute();
+            $result = $statement->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return false;
+        }
+
+        // If a user was found, check the password
+        if ($result !== false) {
+            if (password_verify($data['pwd'], $result['pwd'])) {
+                return $result['user'];
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+        // per default, return false
+        return false;
+    }
 }
