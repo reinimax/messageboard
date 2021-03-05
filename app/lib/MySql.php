@@ -31,6 +31,7 @@ class MySql
             $dsn = 'mysql:host='.$config['host'].';port='.$port.';dbname='.$config['dbname'];
             self::$pdo = new PDO($dsn, $config['user'], $config['pwd']);
         }
+        self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return self::$pdo;
     }
 }
