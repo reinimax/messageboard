@@ -1,30 +1,30 @@
-<form action="/register.php" method="POST" class="needs-validation border border-primary mx-auto w-50 p-4">
+<form action="/register.php" method="POST" class="needs-validation border border-primary mx-auto w-50 p-4" novalidate>
     <h1 class="text-center">Register</h1>
     <div class="form-group">
-        <label for="user">Username *</label>
-        <input type="text" class="form-control <?php echo 'is-invalid'; ?>" 
+        <label for="user">Username *
+        <span class="small">(Only alpha-numeric, underscores and dashes)</span>
+        </label>
+        <input type="text" class="form-control <?php echo ($data['errors']['user']) ? 'is-invalid' : ''; ?>" 
         id="user" name="user" value="<?php echo $_POST['user'] ?? ''; ?>" required placeholder="Your future username ...">
-        <div class="invalid-feedback"><?php echo ''; ?></div>
+        <div class="invalid-feedback"><?php echo $data['errors']['user'] ?? ''; ?></div>
     </div>
     <div class="form-group">
         <label for="email">Email *</label>
-        <input type="email" class="form-control <?php echo 'is-invalid'; ?>" 
+        <input type="email" class="form-control <?php echo ($data['errors']['email']) ? 'is-invalid' : ''; ?>" 
         id="email" name="email" value="<?php echo $_POST['email'] ?? ''; ?>" required placeholder="Your email ...">
-        <div class="invalid-feedback"><?php echo ''; ?></div>
+        <div class="invalid-feedback"><?php echo $data['errors']['email'] ?? ''; ?></div>
     </div>
     <div class="form-group">
         <label for="pwd">Password *
-        <span class="small">At least 8 characters, must contain uppercase and lowercase letters and one digit</span>
+        <span class="small">(At least 8 characters, must contain uppercase and lowercase letters and one digit)</span>
         </label>
-        <input type="password" class="form-control <?php echo 'is-invalid'; ?>" 
+        <input type="password" class="form-control <?php echo ($data['errors']['pwd']) ? 'is-invalid' : ''; ?>" 
         id="pwd" name="pwd" required>
-        <div class="invalid-feedback"><?php echo ''; ?></div> 
+        <div class="invalid-feedback"><?php echo $data['errors']['pwd'] ?? ''; ?></div> 
     </div>
     <div class="form-group">
         <label for="pwdrepeat">Repeat password *</label>
-        <input type="password" class="form-control <?php echo 'is-invalid'; ?>" 
-        id="pwdrepeat" name="pwdrepeat" required>
-        <div class="invalid-feedback"><?php echo ''; ?></div>
+        <input type="password" class="form-control" id="pwdrepeat" name="pwdrepeat" required>
     </div>
     <div class="form-group">
         <input type="submit" class="btn btn-primary w-100" value="Register">
