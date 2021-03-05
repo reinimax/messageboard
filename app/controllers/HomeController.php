@@ -94,6 +94,10 @@ class HomeController
         }
     }
 
+    /**
+     * Opens the login form, validates form entries and logs the user in
+     * @return array View and data to be rendered
+     */
     public function login()
     {
         if (!empty($_POST)) {
