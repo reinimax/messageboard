@@ -54,7 +54,7 @@ class HomeModel
     {
         // Cehck if username or email exists
         $loginUserName = <<<SQL
-            SELECT user, email, pwd FROM users WHERE user=:user;
+            SELECT id, user, email, pwd FROM users WHERE user=:user;
         SQL;
 
         $loginUserEmail = <<<SQL
@@ -77,7 +77,10 @@ class HomeModel
         // If a user was found, check the password
         if ($result !== false) {
             if (password_verify($data['pwd'], $result['pwd'])) {
-                return $result['user'];
+                return [
+                    'user' => $result['user'],
+                    'id' => $result['id'],
+                ];
             } else {
                 return false;
             }

@@ -147,7 +147,7 @@ class HomeController
                         ];
                     } else {
                         $_POST = [];
-                        Session::init()->setLogin(['user' => $result]);
+                        Session::init()->setLogin($result);
                         return [
                             'title' => 'Login successful',
                             'content' => 'index.php',

@@ -51,6 +51,7 @@ class Session
     {
         session_regenerate_id(true);
         $_SESSION['user'] = $data['user'];
+        $_SESSION['user_id'] = $data['id'];
     }
 
     /**
@@ -59,7 +60,7 @@ class Session
      */
     public function checkLogin()
     {
-        if (!isset($_SESSION['user'])) {
+        if (!isset($_SESSION['user']) || !isset($_SESSION['user_id'])) {
             $this->destroySession();
             return false;
         }
