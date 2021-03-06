@@ -60,6 +60,14 @@ My ideas for now. This may change during work on the project.
 - Classes will be integrated using PSR-4 standard and the Composer autoload module.
 - For validation, I will use [GUMP](https://github.com/Wixel/GUMP)
 
+## REST
+- So, I came to the question of how to implement the PUT and DELETE requests
+- There seem to be two main options here (I refer to [this post](https://stackoverflow.com/questions/12085619/php-rest-put-delete-options)):
+  - Send an XMLHttpRequest via JavaScript.
+  - Make a hidden form that submits the real method via POST and check for it in the controller. I decided to go this way for now. It should work well with PUT because only ever a single post can be updated at a time. DELETE may become problematic because I'm adding a lot of hidden forms. Maybe I will change something there in the future.
+  - A third option would be to make this a proper standalone REST API and separate it completely from the frontend. Well, this may be a project for another time.
+
+
 ## Possible extensions
 - Send a newly registered user a welcome mail
 - Forgot password option in login
