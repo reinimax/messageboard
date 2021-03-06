@@ -17,13 +17,26 @@ class PostModel
     }
 
     /**
-     * Retrieve all posts, newest first
+     * Retrieve the newest 10 posts
+     * @return array/false
      */
     public function index()
     {
-        // test
-        $test = 'I\'m a test!';
-        return $test;
+        $getPosts = <<<SQL
+            SELECT posts.title, posts.content, posts.created_at, posts.updated_at, users.user FROM posts 
+            JOIN users ON (posts.user_id = users.id) ORDER BY posts.updated_at DESC LIMIT 10;
+        SQL;
+
+        try {
+            $statement = $this->pdo->query($getPosts);
+            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return $e;
+        }
+        if (!$result) {
+            return false;
+        }
+        return $result;
     }
 
     /**

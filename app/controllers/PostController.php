@@ -14,6 +14,9 @@ class PostController
         $this->model = new PostModel();
     }
 
+    /**
+     * Displays the posts
+     */
     public function index()
     {
         // call model and return the retrieved data
