@@ -3,7 +3,10 @@
 use app\lib\Session;
 
 if (!empty($data['success'])) {
-    include ROOT.'/views/inc/message.php';
+    include ROOT.'/views/inc/success.php';
+}
+if (!empty($data['error'])) {
+    include ROOT.'/views/inc/error.php';
 }
 
 if (Session::init()->checkLogin()) {
