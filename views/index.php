@@ -19,7 +19,8 @@ foreach ($data as $item) {
     echo '<span>by '.$item['user'].'<span class="mx-2"></span>'.$date.'</span>';
     echo '</div>';
     echo '</div>';
-    echo '<div class="card-body">'.$item['content'].'</div>';
+    // pre tags to enable newlines and multiple spaces ... format them later
+    echo '<div class="card-body"><pre>'.$item['content'].'</pre></div>';
     // may need that footer later on
     // echo '<div class="card-footer">Footer</div>';
     echo '</div>';
