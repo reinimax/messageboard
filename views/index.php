@@ -2,15 +2,21 @@
 
 use app\lib\Session;
 
+if (!empty($data['success'])) {
+    include ROOT.'/views/inc/message.php';
+}
+
 if (Session::init()->checkLogin()) {
     include ROOT.'/views/inc/create.php';
 }
 
-// var_dump($data);
+
+
+//var_dump($data);
 
 echo '<h1>The latest posts</h1>';
 
-foreach ($data as $item) {
+foreach ($data['data'] as $item) {
     $date = (DateTime::createFromFormat('Y-m-d H:i:s', $item['updated_at']))->format('D, j M Y, H:i');
     echo '<div class="card my-3">';
     echo '<div class="card-header">';
