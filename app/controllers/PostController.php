@@ -24,10 +24,12 @@ class PostController
 
             $gump->filter_rules([
                 'success' => 'trim|sanitize_string',
+                'error' => 'trim|sanitize_string',
             ]);
 
             $valid_string = $gump->run($_GET);
             $success = urldecode($valid_string['success']);
+            $error = urldecode($valid_string['error']);
         }
         // call model and return the retrieved data
         $data = $this->model->index();
@@ -36,7 +38,8 @@ class PostController
             'content' => 'index.php',
             'data' => [
                 'data' => $data,
-                'success' => $success
+                'success' => $success,
+                'error' => $error
             ],
         ];
     }
@@ -124,5 +127,25 @@ class PostController
                 'content' => 'create.php'
             ];
         }
+    }
+
+    /**
+     * Displays all posts of the current user
+     * @return array The view to be loaded
+     */
+    public function show()
+    {
+        $this->checkLogin();
+        $result = $this->model->show();
+        if ($result === false) {
+            $error= urlencode('Sorry, we couldn\'t find any posts');
+            header('Location:/index.php?error='.$error);
+            exit;
+        }
+        return [
+            'title' => 'Your posts',
+            'content' => 'show.php',
+            'data' => $result
+        ];
     }
 }

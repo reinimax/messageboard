@@ -31,7 +31,32 @@ class PostModel
             $statement = $this->pdo->query($getPosts);
             $result = $statement->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            return $e;
+            return false;
+        }
+        if (!$result) {
+            return false;
+        }
+        return $result;
+    }
+
+    /**
+     * Retrieve all posts of the current user
+     * @return array/false
+     */
+    public function show()
+    {
+        $getPosts = <<<SQL
+            SELECT * FROM posts WHERE user_id=:currentuser
+            ORDER BY updated_at DESC;
+        SQL;
+
+        try {
+            $statement = $this->pdo->prepare($getPosts);
+            $statement->bindParam(':currentuser', $_SESSION['user_id'], PDO::PARAM_STR);
+            $statement->execute();
+            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return false;
         }
         if (!$result) {
             return false;
