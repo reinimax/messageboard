@@ -145,7 +145,7 @@ class PostController
         return [
             'title' => 'Your posts',
             'content' => 'show.php',
-            'data' => $result
+            'data' => ['data' => $result]
         ];
     }
 }
