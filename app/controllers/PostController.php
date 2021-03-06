@@ -148,4 +148,29 @@ class PostController
             'data' => ['data' => $result]
         ];
     }
+
+    /**
+     * Deletes a post
+     */
+    public function delete()
+    {
+        $this->checkLogin();
+        if (!isset($_GET['id'])) {
+            $error= urlencode('Sorry, we couldn\'t find this post');
+            header('Location:/index.php?error='.$error);
+            exit;
+        } else {
+            $id = (int) $_GET['id'];
+        }
+        $result = $this->model->delete($id);
+        if (isset($result['error'])) {
+            $error= urlencode($result['error']);
+            header('Location:/index.php?error='.$error);
+            exit;
+        } elseif (isset($result['success'])) {
+            $success= urlencode($result['success']);
+            header('Location:/index.php?success='.$success);
+            exit;
+        }
+    }
 }

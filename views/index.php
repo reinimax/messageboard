@@ -22,7 +22,7 @@ echo '<h1>The latest posts</h1>';
 foreach ($data['data'] as $item) {
     $date = (DateTime::createFromFormat('Y-m-d H:i:s', $item['updated_at']))->format('D, j M Y, H:i');
     if ($item['user'] === $_SESSION['user']) {
-        $delete =  '<form action="/delete.php" method="POST">';
+        $delete =  '<form action="/delete.php?id='.$item['id'].'" method="POST">';
         $delete .= '<input type="hidden" name="_method" value="delete">';
         $delete .= '<button class="btn py-0 px-1" type="submit"><i class="fas fa-trash-alt"></i></button>';
         $delete .= '</form>';

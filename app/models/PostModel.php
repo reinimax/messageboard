@@ -23,7 +23,7 @@ class PostModel
     public function index()
     {
         $getPosts = <<<SQL
-            SELECT posts.title, posts.content, posts.created_at, posts.updated_at, users.user FROM posts 
+            SELECT posts.id, posts.title, posts.content, posts.created_at, posts.updated_at, users.user FROM posts 
             JOIN users ON (posts.user_id = users.id) ORDER BY posts.updated_at DESC LIMIT 10;
         SQL;
 
@@ -85,5 +85,26 @@ class PostModel
             return ['error' => $e->getMessage()];
         }
         return ['success' => 'You successfully posted a message'];
+    }
+
+    /**
+     * Deletes a post
+     * @param int $id The id of the post to be deleted
+     * @return array with the success- or error-message
+     */
+    public function delete($id)
+    {
+        $deletePost = <<<SQL
+            DELETE FROM posts WHERE id=:id;
+        SQL;
+
+        try {
+            $statement = $this->pdo->prepare($deletePost);
+            $statement->bindParam(':id', $id, PDO::PARAM_INT);
+            $statement->execute();
+        } catch (PDOException $e) {
+            return ['error' => $e->getMessage()];
+        }
+        return ['success' => 'Message deleted'];
     }
 }
