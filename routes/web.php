@@ -2,6 +2,7 @@
 
 // Here the routes for the application are registered
 $app->registerGet('/', [app\controllers\PostController::class, 'index']);
+$app->registerGet('/index', [app\controllers\PostController::class, 'index']);
 $app->registerGet('/login', [app\controllers\HomeController::class, 'login']);
 $app->registerPost('/login', [app\controllers\HomeController::class, 'login']);
 $app->registerGet('/logout', [app\controllers\HomeController::class, 'logout']);
