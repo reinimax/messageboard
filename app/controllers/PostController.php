@@ -19,12 +19,25 @@ class PostController
      */
     public function index()
     {
+        if (!empty($_GET)) {
+            $gump = new \GUMP();
+
+            $gump->filter_rules([
+                'success' => 'trim|sanitize_string',
+            ]);
+
+            $valid_string = $gump->run($_GET);
+            $success = urldecode($valid_string['success']);
+        }
         // call model and return the retrieved data
         $data = $this->model->index();
         return [
             'title' => 'Index',
             'content' => 'index.php',
-            'data' => $data
+            'data' => [
+                'data' => $data,
+                'success' => $success
+            ],
         ];
     }
 
