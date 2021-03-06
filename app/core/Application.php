@@ -70,7 +70,18 @@ class Application
 
     protected function getMethod()
     {
-        return strtolower($_SERVER['REQUEST_METHOD']);
+        $method = strtolower($_SERVER['REQUEST_METHOD']);
+        if ($method === 'post') {
+            if (isset($_POST['_method'])) {
+                if ($_POST['_method'] === 'put') {
+                    $method = 'put';
+                }
+                if ($_POST['_method'] === 'delete') {
+                    $method = 'delete';
+                }
+            }
+        }
+        return $method;
     }
 
     /**
