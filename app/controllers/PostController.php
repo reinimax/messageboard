@@ -104,11 +104,9 @@ class PostController
                         ];
                     } else {
                         $_POST = [];
-                        return [
-                            'title' => 'Success',
-                            'content' => 'index.php',
-                            'data' => $result['success']
-                        ];
+                        $success= urlencode('Great! You succesfully posted a new message');
+                        header('Location:/index.php?success='.$success);
+                        exit;
                     }
                 }
             } else {
