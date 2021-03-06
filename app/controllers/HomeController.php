@@ -70,11 +70,10 @@ class HomeController
                         ];
                     } else {
                         $_POST = [];
-                        return [
-                            'title' => 'Successfully registered',
-                            'content' => 'index.php',
-                            'data' => $result['success']
-                        ];
+                        $success= urlencode('You are succesfully registered');
+                        // go to index
+                        header('Location:/index.php?success='.$success);
+                        exit;
                     }
                 }
             } else {
@@ -148,11 +147,10 @@ class HomeController
                     } else {
                         $_POST = [];
                         Session::init()->setLogin($result);
-                        return [
-                            'title' => 'Login successful',
-                            'content' => 'index.php',
-                            'data' => 'Successfully logged in'
-                        ];
+                        $success= urlencode('Login was successful%2E Welcome back!');
+                        // go to index
+                        header('Location:/index.php?success='.$success);
+                        exit;
                     }
                 }
             } else {
