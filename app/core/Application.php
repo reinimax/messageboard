@@ -62,7 +62,7 @@ class Application
                 'content' => 'error.php',
                 'data' => [
                     'error' => 'Method/Route not found',
-                    'errormsg' => 'The method or the route was not found'
+                    'errormsg' => 'The method '.$method.' or the route '.$route.' was not found'
                 ]
             ]);
         }
