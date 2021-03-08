@@ -13,10 +13,6 @@ if (Session::init()->checkLogin()) {
     include ROOT.'/views/inc/create.php';
 }
 
-
-
-//var_dump($data);
-
 echo '<h1>'.$data['title'].'</h1>';
 
 foreach ($data['data'] as $item) {
