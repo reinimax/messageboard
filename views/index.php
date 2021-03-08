@@ -17,7 +17,7 @@ if (Session::init()->checkLogin()) {
 
 //var_dump($data);
 
-echo '<h1>The latest posts</h1>';
+echo '<h1>'.$data['title'].'</h1>';
 
 foreach ($data['data'] as $item) {
     $date = (DateTime::createFromFormat('Y-m-d H:i:s', $item['updated_at']))->format('D, j M Y, H:i');

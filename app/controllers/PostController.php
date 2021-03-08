@@ -39,7 +39,8 @@ class PostController
             'data' => [
                 'data' => $data,
                 'success' => $success,
-                'error' => $error
+                'error' => $error,
+                'title' => 'The latest posts'
             ],
         ];
     }
