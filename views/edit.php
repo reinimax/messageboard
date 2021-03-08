@@ -1,8 +1,6 @@
 <?php
 use app\lib\Session;
 
-var_dump($data);
-
 ?>
 <form action="/edit.php?id=<?php echo $data['data']['id']; ?>" method="POST" 
 class="needs-validation border border-primary mx-auto w-50 p-4" novalidate>
