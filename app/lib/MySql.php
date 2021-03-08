@@ -29,7 +29,7 @@ class MySql
         $port = ($config['port']) ?? 3306;
         if (self::$pdo === null) {
             $dsn = 'mysql:host='.$config['host'].';port='.$port.';dbname='.$config['dbname'];
-            self::$pdo = new PDO($dsn, $config['user'], $config['pwd']);
+            self::$pdo = new PDO($dsn, $config['user'], $config['pwd'], [PDO::MYSQL_ATTR_FOUND_ROWS => true]);
         }
         self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return self::$pdo;
