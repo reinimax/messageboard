@@ -48,20 +48,20 @@ class PostModel
     {
         $getPostsByTitle = <<<SQL
             SELECT posts.id, posts.title, posts.content, posts.created_at, posts.updated_at, users.user FROM posts 
-            JOIN users ON (posts.user_id = users.id) WHERE posts.title LIKE CONCAT("%", :query, "%")
+            JOIN users ON (posts.user_id = users.id) WHERE MATCH(posts.title) AGAINST(:query)
             ORDER BY posts.updated_at DESC;
         SQL;
 
         $getPostsByUser = <<<SQL
             SELECT posts.id, posts.title, posts.content, posts.created_at, posts.updated_at, users.user FROM posts 
-            JOIN users ON (posts.user_id = users.id) WHERE users.user LIKE CONCAT("%", :query, "%")
+            JOIN users ON (posts.user_id = users.id) WHERE MATCH(users.user) AGAINST(:query)
             ORDER BY posts.updated_at DESC;
         SQL;
 
         $getPostsAll = <<<SQL
             SELECT posts.id, posts.title, posts.content, posts.created_at, posts.updated_at, users.user FROM posts 
-            JOIN users ON (posts.user_id = users.id) WHERE users.user LIKE CONCAT("%", :query, "%") OR 
-            posts.title LIKE CONCAT("%", :query, "%") OR posts.content LIKE CONCAT("%", :query, "%")
+            JOIN users ON (posts.user_id = users.id) WHERE MATCH(posts.title, posts.content) AGAINST(:query) OR
+            MATCH(users.user) AGAINST(:query)
             ORDER BY posts.updated_at DESC;
         SQL;
 
@@ -78,7 +78,7 @@ class PostModel
             return $e->getMessage();
         }
         if (!$result) {
-            return false;
+            return [];
         }
         return $result;
     }
