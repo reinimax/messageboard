@@ -132,4 +132,32 @@ class PostModel
         }
         return $result;
     }
+
+    /**
+     * Update a post
+     * @param int $id The id of the post
+     * @param $data The submitted data
+     * @return array with the success- or error-message
+     */
+    public function update($id, $data)
+    {
+        $updatePost = <<<SQL
+            UPDATE posts SET title=:title, content=:content WHERE id=:id;
+        SQL;
+
+        try {
+            $statement = $this->pdo->prepare($updatePost);
+            $statement->bindParam(':id', $id, PDO::PARAM_INT);
+            $statement->bindParam(':title', $data['title'], PDO::PARAM_STR);
+            $statement->bindParam(':content', $data['message'], PDO::PARAM_STR);
+            $statement->execute();
+            $result = $statement->rowCount();
+        } catch (PDOException $e) {
+            return ['error' => $e->getMessage()];
+        }
+        if ($result === 0) {
+            return ['error' => 'Sorry, we couldn\'t find this post'];
+        }
+        return ['success' => 'You succesfully updated your post'];
+    }
 }

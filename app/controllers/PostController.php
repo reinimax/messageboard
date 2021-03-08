@@ -201,4 +201,85 @@ class PostController
             'data' => ['data' => $result]
         ];
     }
+
+    /**
+     * Updates a post
+     */
+    public function update()
+    {
+        $this->checkLogin();
+        if (!isset($_GET['id'])) {
+            $error= urlencode('Sorry, we couldn\'t find this post');
+            header('Location:/index.php?error='.$error);
+            exit;
+        } else {
+            $id = (int) $_GET['id'];
+        }
+
+        // Validate POST
+        if (!empty($_POST)) {
+            if (hash_equals(Session::init()->getCsrfToken(), $_POST['_token'])) {
+                // Validation
+                $gump = new \GUMP();
+
+                $gump->filter_rules([
+                    'title' => 'trim|sanitize_string',
+                    'message' => 'trim|sanitize_string',
+                ]);
+
+                $gump->validation_rules([
+                    'title' => 'required',
+                    'message' => 'required',
+                ]);
+
+                $valid_data = $gump->run($_POST);
+
+                if ($gump->errors()) {
+                    $errors = $gump->get_errors_array();
+                    return [
+                        'title' => 'Edit post',
+                        'content' => 'edit.php',
+                        'data' => [
+                            'errors' => $errors,
+                            'data' => [
+                                'title' => $_POST['title'],
+                                'content' => $_POST['message'],
+                                ]
+                            ]
+                        ];
+                } else {
+                    // Update the post
+                    $result = $this->model->update($id, $valid_data);
+                    if (isset($result['error'])) {
+                        return [
+                            'title' => 'Edit post',
+                            'content' => 'edit.php',
+                            'data' => [
+                                'error' => $result['error'],
+                                'data' => [
+                                    'title' => $_POST['title'],
+                                    'content' => $_POST['message'],
+                                ]
+                            ]
+                        ];
+                    } else {
+                        $_POST = [];
+                        $success= urlencode($result['success']);
+                        header('Location:/index.php?success='.$success);
+                        exit;
+                    }
+                }
+            } else {
+                // if CSRF Validation failed
+                $error= urlencode('Ups, something went wrong ...');
+                header('Location:/index.php?error='.$error);
+                exit;
+            }
+        } else {
+            // if $_POST is empty
+            $error= urlencode('Ups, something went wrong ...');
+            header('Location:/index.php?error='.$error);
+            exit;
+        }
+    }
 }
