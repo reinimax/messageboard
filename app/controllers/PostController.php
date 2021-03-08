@@ -45,6 +45,37 @@ class PostController
         ];
     }
 
+    /**
+     * Searches for posts
+     */
+    public function search()
+    {
+        if (!empty($_GET)) {
+            $gump = new \GUMP();
+
+            $gump->filter_rules([
+                'query' => 'trim|sanitize_string',
+                'limit' => 'trim|sanitize_string',
+            ]);
+
+            $valid = $gump->run($_GET);
+        } else {
+            // without query string go back to the index
+            header('Location:/index.php');
+            exit;
+        }
+        // call model and return the retrieved data
+        $data = $this->model->search($valid);
+        return [
+            'title' => 'Index',
+            'content' => 'index.php',
+            'data' => [
+                'data' => $data,
+                'title' => 'Your results'
+            ],
+        ];
+    }
+
     protected function checkLogin()
     {
         if (Session::init()->checkLogin() === false) {
