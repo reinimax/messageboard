@@ -4,7 +4,8 @@ use app\lib\Session;
 var_dump($data);
 
 ?>
-<form action="/edit.php" method="POST" class="needs-validation border border-primary mx-auto w-50 p-4" novalidate>
+<form action="/edit.php?id=<?php echo $data['data']['id']; ?>" method="POST" 
+class="needs-validation border border-primary mx-auto w-50 p-4" novalidate>
     <h1 class="text-center">Edit post</h1>
     <?php
     if (isset($data['error'])) {
