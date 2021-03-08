@@ -40,6 +40,50 @@ class PostModel
     }
 
     /**
+     * Retrieve posts that fulfill the passed parameters
+     * @param array $parameters The query and limit
+     * @return array/false
+     */
+    public function search($parameters)
+    {
+        $getPostsByTitle = <<<SQL
+            SELECT posts.id, posts.title, posts.content, posts.created_at, posts.updated_at, users.user FROM posts 
+            JOIN users ON (posts.user_id = users.id) WHERE posts.title LIKE CONCAT("%", :query, "%")
+            ORDER BY posts.updated_at DESC;
+        SQL;
+
+        $getPostsByUser = <<<SQL
+            SELECT posts.id, posts.title, posts.content, posts.created_at, posts.updated_at, users.user FROM posts 
+            JOIN users ON (posts.user_id = users.id) WHERE users.user LIKE CONCAT("%", :query, "%")
+            ORDER BY posts.updated_at DESC;
+        SQL;
+
+        $getPostsAll = <<<SQL
+            SELECT posts.id, posts.title, posts.content, posts.created_at, posts.updated_at, users.user FROM posts 
+            JOIN users ON (posts.user_id = users.id) WHERE users.user LIKE CONCAT("%", :query, "%") OR 
+            posts.title LIKE CONCAT("%", :query, "%") OR posts.content LIKE CONCAT("%", :query, "%")
+            ORDER BY posts.updated_at DESC;
+        SQL;
+
+        try {
+            switch ($parameters['limit']) {
+                case 'title': $statement = $this->pdo->prepare($getPostsByTitle); break;
+                case 'user': $statement = $this->pdo->prepare($getPostsByUser); break;
+                default: $statement = $this->pdo->prepare($getPostsAll);
+            }
+            $statement->bindParam(':query', $parameters['query'], PDO::PARAM_STR);
+            $statement->execute();
+            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return $e->getMessage();
+        }
+        if (!$result) {
+            return false;
+        }
+        return $result;
+    }
+
+    /**
      * Retrieve all posts of the current user
      * @return array/false
      */
