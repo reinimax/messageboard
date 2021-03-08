@@ -107,4 +107,29 @@ class PostModel
         }
         return ['success' => 'Message deleted'];
     }
+
+    /**
+     * Gets the data of a post
+     * @param int $id The id of the post
+     * @return array
+     */
+    public function edit($id)
+    {
+        $getPost = <<<SQL
+            SELECT * FROM posts WHERE id=:id;
+        SQL;
+
+        try {
+            $statement = $this->pdo->prepare($getPost);
+            $statement->bindParam(':id', $id, PDO::PARAM_INT);
+            $statement->execute();
+            $result = $statement->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return ['error' => $e->getMessage()];
+        }
+        if ($result === false) {
+            return ['error' => 'Sorry, we couldn\'t find this post'];
+        }
+        return $result;
+    }
 }

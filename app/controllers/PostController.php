@@ -173,4 +173,32 @@ class PostController
             exit;
         }
     }
+
+    /**
+     * Opens the form for editing a post and fills in the appropriate data
+     * @return array On success the view to be loaded with the data
+     * On failure redirect to index.php with an error message
+     */
+    public function edit()
+    {
+        $this->checkLogin();
+        if (!isset($_GET['id'])) {
+            $error= urlencode('Sorry, we couldn\'t find this post');
+            header('Location:/index.php?error='.$error);
+            exit;
+        } else {
+            $id = (int) $_GET['id'];
+        }
+        $result = $this->model->edit($id);
+        if (isset($result['error'])) {
+            $error= urlencode($result['error']);
+            header('Location:/index.php?error='.$error);
+            exit;
+        }
+        return [
+            'title' => 'Edit post',
+            'content' => 'edit.php',
+            'data' => ['data' => $result]
+        ];
+    }
 }
