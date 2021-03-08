@@ -15,3 +15,5 @@ $app->registerGet('/show', [app\controllers\PostController::class, 'show']);
 $app->registerGet('/edit', [app\controllers\PostController::class, 'edit']);
 $app->registerPut('/edit', [app\controllers\PostController::class, 'update']);
 $app->registerDelete('/delete', [app\controllers\PostController::class, 'delete']);
+
+$app->registerGet('/search', [app\controllers\PostController::class, 'search']);
