@@ -58,7 +58,7 @@ try {
 $createTags = <<<SQL
     CREATE TABLE IF NOT EXISTS tags(
         id INT UNSIGNED AUTO_INCREMENT,
-        tag VARCHAR(100) NOT NULL,
+        tag VARCHAR(100) NOT NULL UNIQUE,
         PRIMARY KEY(id),
         FULLTEXT(tag)
     )
