@@ -126,6 +126,7 @@ class PostController
                 $gump->filter_rules([
                     'title' => 'trim|sanitize_string',
                     'message' => 'trim|sanitize_string',
+                    'tag' => 'trim|sanitize_string',
                 ]);
 
                 $gump->validation_rules([
