@@ -67,6 +67,12 @@ My ideas for now. This may change during work on the project.
   - Make a hidden form that submits the real method via POST and check for it in the controller. I decided to go this way for now. It should work well with PUT because only ever a single post can be updated at a time. DELETE may become problematic because I'm adding a lot of hidden forms. Maybe I will change something there in the future.
   - A third option would be to make this a proper standalone REST API and separate it completely from the frontend. Well, this may be a project for another time.
 
+## Search function
+- I had quite some fun researching and experimenting with implementing a search function. 
+- At first I tried the LIKE clause, which worked fine at the first attempt, but turned out to be actually quite limited. Also, it is stated that it eats up much performance though for the scope of this project this would probably be no problem.
+- Then I tried the MySql Fulltext search, which is far mightier, more flexible, and also quite weird at times (I'll never wonder again when I get weird search results somewhere). I played around with the boolean mode, but decided to leave it in natural language mode for simplicity's sake. The boolean mode would be cool for a dedicated search mask.
+- I also found out that there are external full-text engines. 
+
 
 ## Possible extensions
 - Send a newly registered user a welcome mail
