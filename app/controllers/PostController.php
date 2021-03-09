@@ -102,10 +102,12 @@ class PostController
      */
     public function create()
     {
+        $tags = $this->model->getTags();
         $this->checkLogin();
         return [
             'title' => 'New post',
-            'content' => 'create.php'
+            'content' => 'create.php',
+            'data' => $tags
         ];
     }
 

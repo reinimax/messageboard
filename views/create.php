@@ -21,6 +21,18 @@ use app\lib\Session;
         id="message" name="message" required placeholder="Your message ..."></textarea>
         <div class="invalid-feedback"><?php echo $data['errors']['message'] ?? ''; ?></div> 
     </div>
+    <div class="form-group">
+        <label for="tag">Add a tag</label>
+            <input list="tags" name="tag" id="tag" class="form-control">
+            <datalist id="tags">
+            <?php
+            foreach ($data as $item) {
+                echo '<option value="'.$item['tag'].'">';
+            }
+            ?>
+            </datalist>
+        </div>
+    </div>
     <input type="hidden" name="_token" value="<?php echo Session::init()->setCsrfToken(); ?>">
     <div class="form-group">
         <input type="submit" class="btn btn-primary w-100" value="Post your message">
