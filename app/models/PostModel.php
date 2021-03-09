@@ -123,7 +123,7 @@ class PostModel
 
         try {
             $statement = $this->pdo->prepare($savePost);
-            $statement->bindParam(':user', $_SESSION['user_id'], PDO::PARAM_STR);
+            $statement->bindParam(':user', $_SESSION['user_id'], PDO::PARAM_INT);
             $statement->bindParam(':title', $data['title'], PDO::PARAM_STR);
             $statement->bindParam(':content', $data['message'], PDO::PARAM_STR);
             $statement->execute();
