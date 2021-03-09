@@ -116,6 +116,7 @@ class PostModel
      */
     public function save($data)
     {
+        // save the post
         $savePost = <<<SQL
             INSERT INTO posts (user_id, title, content) VALUES (:user, :title, :content);
         SQL;
@@ -126,9 +127,26 @@ class PostModel
             $statement->bindParam(':title', $data['title'], PDO::PARAM_STR);
             $statement->bindParam(':content', $data['message'], PDO::PARAM_STR);
             $statement->execute();
+            $post_id = $this->pdo->lastInsertId();
         } catch (PDOException $e) {
             return ['error' => $e->getMessage()];
         }
+
+        // save the connection between the post and the tag
+        if (!empty($data['tag'])) {
+            $savePostTag = <<<SQL
+            INSERT INTO posts_tags (post_id, tag_id) VALUES ($post_id, :tag_id);
+            SQL;
+
+            try {
+                $statement = $this->pdo->prepare($savePostTag);
+                $statement->bindParam(':tag_id', $data['tag'], PDO::PARAM_INT);
+                $statement->execute();
+            } catch (PDOException $e) {
+                return ['error' => $e->getMessage()];
+            }
+        }
+
         return ['success' => 'You successfully posted a message'];
     }
 
