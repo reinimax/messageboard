@@ -24,7 +24,8 @@ $createUsers = <<<SQL
         email VARCHAR(100) NOT NULL UNIQUE,
         pwd VARCHAR(255) NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        PRIMARY KEY(id)
+        PRIMARY KEY(id),
+        FULLTEXT(user)
     )
 SQL;
 
@@ -39,11 +40,12 @@ $createPosts = <<<SQL
         id INT UNSIGNED AUTO_INCREMENT,
         user_id INT UNSIGNED NOT NULL,
         title VARCHAR(100),
-        content TEXT,
+        content TEXT BINARY,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         PRIMARY KEY(id),
-        FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE 
+        FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+        FULLTEXT(title,content)
     )
 SQL;
 
