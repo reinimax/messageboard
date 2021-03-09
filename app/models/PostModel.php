@@ -141,9 +141,9 @@ class PostModel
             INSERT INTO posts_tags (post_id, tag_id) VALUES ($post_id, :tag_id);
             SQL;
             try {
+                $statement = $this->pdo->prepare($savePostTag);
+                $statement->bindParam(':tag_id', $item, PDO::PARAM_INT);
                 foreach ($data['tag'] as $item) {
-                    $statement = $this->pdo->prepare($savePostTag);
-                    $statement->bindParam(':tag_id', $item, PDO::PARAM_INT);
                     $statement->execute();
                 }
             } catch (PDOException $e) {
