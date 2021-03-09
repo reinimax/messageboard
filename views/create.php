@@ -25,7 +25,8 @@ use app\lib\Session;
         <label for="tag">Add tags 
         <span class="small">(Click and drag or hold crtl or shift to select multiple tags)</span>
         </label>
-        <select name="tag" id="tag" class="form-control" multiple size="3">
+        <!-- The brackets in the name are important! This tells PHP to aggregate multiple values into an array -->
+        <select name="tag[]" id="tag" class="form-control" multiple size="3">
             <?php
             foreach ($data as $item) {
                 echo '<option value="'.$item['id'].'">'.$item['tag'].'</option>';
