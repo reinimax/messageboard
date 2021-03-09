@@ -55,6 +55,8 @@ My ideas for now. This may change during work on the project.
 ## DB:
 - A table users with id (pk), username, email, pwd, created_at
 - A table posts with id (pk), user_id (fk), title, text, created_at, updated_at
+- A table tags with id (pk), tag
+- A table posts_tags, which is a pivot table for establishing a m:n relationship between posts and tags
 
 ## Misc.
 - Classes will be integrated using PSR-4 standard and the Composer autoload module.
