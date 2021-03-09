@@ -205,4 +205,26 @@ class PostModel
         }
         return ['success' => 'You succesfully updated your post'];
     }
+
+    /**
+     * Get a list of all tags
+     * @return array
+     */
+    public function getTags()
+    {
+        $getTags = <<<SQL
+            SELECT * FROM tags;
+        SQL;
+
+        try {
+            $statement = $this->pdo->query($getTags);
+            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return [];
+        }
+        if ($result === 0) {
+            return [];
+        }
+        return $result;
+    }
 }
