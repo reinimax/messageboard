@@ -22,16 +22,16 @@ use app\lib\Session;
         <div class="invalid-feedback"><?php echo $data['errors']['message'] ?? ''; ?></div> 
     </div>
     <div class="form-group">
-        <label for="tag">Add a tag</label>
-            <input list="tags" name="tag" id="tag" class="form-control">
-            <datalist id="tags">
+        <label for="tag">Add tags 
+        <span class="small">(Click and drag or hold crtl or shift to select multiple tags)</span>
+        </label>
+        <select name="tag" id="tag" class="form-control" multiple size="3">
             <?php
             foreach ($data as $item) {
-                echo '<option value="'.$item['tag'].'">';
+                echo '<option value="'.$item['id'].'">'.$item['tag'].'</option>';
             }
             ?>
-            </datalist>
-        </div>
+        </select>
     </div>
     <input type="hidden" name="_token" value="<?php echo Session::init()->setCsrfToken(); ?>">
     <div class="form-group">
