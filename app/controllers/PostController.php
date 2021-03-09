@@ -66,12 +66,24 @@ class PostController
         }
         // call model and return the retrieved data
         $data = $this->model->search($valid);
+        if (!$data) {
+            return [
+                'title' => 'Index',
+                'content' => 'index.php',
+                'data' => [
+                    'data' => [],
+                    'title' => 'No results found',
+                    'error' => 'Your search for "'.$valid['query'].'" yielded no results'
+                ],
+            ];
+        }
         return [
             'title' => 'Index',
             'content' => 'index.php',
             'data' => [
-                'data' => $data,
-                'title' => 'Your results'
+                'data' => $data['result'],
+                'title' => 'Your results',
+                'success' => 'Your search for "'.$valid['query'].'" yielded '.$data['count'].' results'
             ],
         ];
     }
