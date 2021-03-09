@@ -39,8 +39,8 @@ $createPosts = <<<SQL
     CREATE TABLE IF NOT EXISTS posts(
         id INT UNSIGNED AUTO_INCREMENT,
         user_id INT UNSIGNED NOT NULL,
-        title VARCHAR(100),
-        content TEXT BINARY,
+        title VARCHAR(100) NOT NULL,
+        content TEXT NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         PRIMARY KEY(id),
@@ -51,6 +51,37 @@ SQL;
 
 try {
     $pdo->query($createPosts);
+} catch (PDOException $e) {
+    echo $e;
+}
+
+$createTags = <<<SQL
+    CREATE TABLE IF NOT EXISTS tags(
+        id INT UNSIGNED AUTO_INCREMENT,
+        tag VARCHAR(100) NOT NULL,
+        PRIMARY KEY(id),
+        FULLTEXT(tag)
+    )
+SQL;
+
+try {
+    $pdo->query($createTags);
+} catch (PDOException $e) {
+    echo $e;
+}
+
+$createPivot = <<<SQL
+    CREATE TABLE IF NOT EXISTS posts_tags(
+        post_id INT UNSIGNED NOT NULL,
+        tag_id INT UNSIGNED NOT NULL,
+        PRIMARY KEY(post_id,tag_id),
+        FOREIGN KEY (post_id) REFERENCES posts(id) ON UPDATE CASCADE ON DELETE CASCADE,
+        FOREIGN KEY (tag_id) REFERENCES tags(id) ON UPDATE CASCADE ON DELETE CASCADE
+    )
+SQL;
+
+try {
+    $pdo->query($createPivot);
 } catch (PDOException $e) {
     echo $e;
 }
