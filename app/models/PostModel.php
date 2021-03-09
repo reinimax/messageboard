@@ -42,7 +42,7 @@ class PostModel
     /**
      * Retrieve posts that fulfill the passed parameters
      * @param array $parameters The query and limit
-     * @return array/false
+     * @return array/false FALSE on failure, an array with the found rows and rowcount on success
      */
     public function search($parameters)
     {
@@ -74,13 +74,14 @@ class PostModel
             $statement->bindParam(':query', $parameters['query'], PDO::PARAM_STR);
             $statement->execute();
             $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $count = $statement->rowCount();
         } catch (PDOException $e) {
-            return $e->getMessage();
+            return false;
         }
         if (!$result) {
-            return [];
+            return false;
         }
-        return $result;
+        return ['result' => $result, 'count' => $count];
     }
 
     /**
