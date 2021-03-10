@@ -1,7 +1,7 @@
 <?php
 use app\lib\Session;
 
-echo $key =  implode('', array_keys($data['data']));
+$key =  implode('', array_keys($data['data']));
 
 ?>
 <form action="/edit.php?id=<?php echo $key; ?>" method="POST" 
