@@ -5,6 +5,7 @@
         <option value="all">All</option>
         <option value="user">User</option>
         <option value="title">Title</option>
+        <option value="tag">Tag</option>
     </select>
     <button class="btn btn-outline-primary" type="submit">Search</button>
 </form>
