@@ -277,6 +277,7 @@ class PostController
                 $gump->filter_rules([
                     'title' => 'trim|sanitize_string',
                     'message' => 'trim|sanitize_string',
+                    'tag' => 'trim|sanitize_string',
                 ]);
 
                 $gump->validation_rules([
@@ -285,20 +286,31 @@ class PostController
                 ]);
 
                 $valid_data = $gump->run($_POST);
-
+                $taglist = $this->model->getTags();
                 if ($gump->errors()) {
                     $errors = $gump->get_errors_array();
+
+                    $contents = [
+                        'title' => $_POST['title'],
+                        'content' => $_POST['message'],
+                    ];
+                    $completeSubarray = [];
+                    foreach ($_POST['tag'] as $tag) {
+                        $temp = ['id' => $tag];
+                        $completeSubarray[] = array_merge($contents, $temp);
+                    }
+
                     return [
                         'title' => 'Edit post',
                         'content' => 'edit.php',
                         'data' => [
                             'errors' => $errors,
                             'data' => [
-                                'title' => $_POST['title'],
-                                'content' => $_POST['message'],
-                                ]
-                            ]
-                        ];
+                                $id => $completeSubarray
+                            ],
+                            'taglist' => $taglist
+                        ]
+                    ];
                 } else {
                     // Update the post
                     $result = $this->model->update($id, $valid_data);
