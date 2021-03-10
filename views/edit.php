@@ -38,7 +38,7 @@ class="needs-validation border border-primary mx-auto w-50 p-4" novalidate>
             foreach ($data['taglist'] as $item) {
                 $selected = '';
                 foreach ($data['data'][$key] as $selectedItem) {
-                    if ($item['tag'] === $selectedItem['tag']) {
+                    if ($item['id'] === $selectedItem['id']) {
                         $selected = 'selected';
                     }
                 }
