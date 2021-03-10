@@ -286,20 +286,22 @@ class PostController
                 ]);
 
                 $valid_data = $gump->run($_POST);
+
+                // prepare the parts to be returned on error
                 $taglist = $this->model->getTags();
+                $contents = [
+                    'title' => $_POST['title'],
+                    'content' => $_POST['message'],
+                ];
+                $completeSubarray = [];
+                foreach ($_POST['tag'] as $tag) {
+                    $temp = ['id' => $tag];
+                    $completeSubarray[] = array_merge($contents, $temp);
+                }
+                // prepare the parts to be returned on error END
+
                 if ($gump->errors()) {
                     $errors = $gump->get_errors_array();
-
-                    $contents = [
-                        'title' => $_POST['title'],
-                        'content' => $_POST['message'],
-                    ];
-                    $completeSubarray = [];
-                    foreach ($_POST['tag'] as $tag) {
-                        $temp = ['id' => $tag];
-                        $completeSubarray[] = array_merge($contents, $temp);
-                    }
-
                     return [
                         'title' => 'Edit post',
                         'content' => 'edit.php',
@@ -321,9 +323,9 @@ class PostController
                             'data' => [
                                 'error' => $result['error'],
                                 'data' => [
-                                    'title' => $_POST['title'],
-                                    'content' => $_POST['message'],
-                                ]
+                                    $id => $completeSubarray
+                                ],
+                                'taglist' => $taglist
                             ]
                         ];
                     } else {
