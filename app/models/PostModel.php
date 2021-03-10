@@ -94,7 +94,10 @@ class PostModel
     public function show()
     {
         $getPosts = <<<SQL
-            SELECT * FROM posts WHERE user_id=:currentuser
+            SELECT posts.*, tags.tag FROM posts 
+            LEFT JOIN posts_tags AS pt ON (posts.id = pt.post_id)
+            LEFT JOIN tags ON (pt.tag_id = tags.id)
+            WHERE user_id=:currentuser
             ORDER BY updated_at DESC;
         SQL;
 
@@ -102,7 +105,7 @@ class PostModel
             $statement = $this->pdo->prepare($getPosts);
             $statement->bindParam(':currentuser', $_SESSION['user_id'], PDO::PARAM_STR);
             $statement->execute();
-            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $result = $statement->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             return false;
         }
