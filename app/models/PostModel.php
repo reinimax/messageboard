@@ -307,4 +307,31 @@ class PostModel
         }
         return $result;
     }
+
+    /**
+     * Save a new tag
+     * @param array $data The validated form entry
+     * @return array with the success- or error-message
+     */
+    public function createtag($data)
+    {
+        $saveTag = <<<SQL
+            INSERT INTO tags (tag) VALUES (:tag);
+        SQL;
+
+        try {
+            $statement = $this->pdo->prepare($saveTag);
+            $statement->bindParam(':tag', $data['newtag'], PDO::PARAM_STR);
+            $statement->execute();
+            if ($statement->rowCount() === 0) {
+                return ['error' => 'Could not create new tag'];
+            }
+        } catch (PDOException $e) {
+            if ($e->getCode() == 23000) {
+                return ['error' => 'This tag already exists!'];
+            }
+            return ['error' => $e->getMessage()];
+        }
+        return ['success' => 'Tag sucessfully created'];
+    }
 }
