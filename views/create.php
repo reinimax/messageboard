@@ -40,6 +40,10 @@ use app\lib\Session;
             ?>
         </select>
     </div>
+    <div class="alert alert-info">
+        Don't find the right tag? <a href="/createtag" class="alert-link">Create one!</a>.
+        <p class="small">(<strong>Important!</strong> Your message will not be saved if you do this!)</p>
+    </div>
     <input type="hidden" name="_token" value="<?php echo Session::init()->setCsrfToken(); ?>">
     <div class="form-group">
         <input type="submit" class="btn btn-primary w-100" value="Post your message">
