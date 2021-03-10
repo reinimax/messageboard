@@ -208,14 +208,17 @@ class PostModel
     public function edit($id)
     {
         $getPost = <<<SQL
-            SELECT * FROM posts WHERE id=:id;
+            SELECT posts.*, tags.tag FROM posts 
+            LEFT JOIN posts_tags AS pt ON (posts.id = pt.post_id)
+            LEFT JOIN tags ON (pt.tag_id = tags.id) 
+            WHERE posts.id=:id;
         SQL;
 
         try {
             $statement = $this->pdo->prepare($getPost);
             $statement->bindParam(':id', $id, PDO::PARAM_INT);
             $statement->execute();
-            $result = $statement->fetch(PDO::FETCH_ASSOC);
+            $result = $statement->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             return ['error' => $e->getMessage()];
         }
