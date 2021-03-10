@@ -253,6 +253,36 @@ class PostModel
         if ($result === 0) {
             return ['error' => 'Sorry, we couldn\'t find this post'];
         }
+
+        // delete all connections of the updated post in the pivot table
+        if (!empty($data['tag'])) {
+            $deletePostTags = <<<SQL
+            DELETE FROM posts_tags WHERE post_id=:id
+            SQL;
+            try {
+                $statement = $this->pdo->prepare($deletePostTags);
+                $statement->bindParam(':id', $id, PDO::PARAM_INT);
+                $statement->execute();
+            } catch (PDOException $e) {
+                return ['error' => $e->getMessage()];
+            }
+
+            // save all connections of the updated post in the pivot table
+            $savePostTag = <<<SQL
+            INSERT INTO posts_tags (post_id, tag_id) VALUES (:post_id, :tag_id);
+            SQL;
+            try {
+                $statement = $this->pdo->prepare($savePostTag);
+                $statement->bindParam(':post_id', $id, PDO::PARAM_INT);
+                $statement->bindParam(':tag_id', $item, PDO::PARAM_INT);
+                foreach ($data['tag'] as $item) {
+                    $statement->execute();
+                }
+            } catch (PDOException $e) {
+                return ['error' => $e->getMessage()];
+            }
+        }
+
         return ['success' => 'You succesfully updated your post'];
     }
 
