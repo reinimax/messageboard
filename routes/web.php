@@ -17,3 +17,5 @@ $app->registerPut('/edit', [app\controllers\PostController::class, 'update']);
 $app->registerDelete('/delete', [app\controllers\PostController::class, 'delete']);
 
 $app->registerGet('/search', [app\controllers\PostController::class, 'search']);
+$app->registerGet('/createtag', [app\controllers\PostController::class, 'createtag']);
+$app->registerPost('/createtag', [app\controllers\PostController::class, 'createtag']);
