@@ -18,7 +18,7 @@ use app\lib\Session;
     <div class="form-group">
         <label for="message">Message *</label>
         <textarea class="form-control <?php echo ($data['errors']['message']) ? 'is-invalid' : ''; ?>" 
-        id="message" name="message" required placeholder="Your message ..."></textarea>
+        id="message" name="message" required placeholder="Your message ..."><?php echo $_POST['message'] ?? ''; ?></textarea>
         <div class="invalid-feedback"><?php echo $data['errors']['message'] ?? ''; ?></div> 
     </div>
     <div class="form-group">
@@ -28,8 +28,14 @@ use app\lib\Session;
         <!-- The brackets in the name are important! This tells PHP to aggregate multiple values into an array -->
         <select name="tag[]" id="tag" class="form-control" multiple size="3">
             <?php
-            foreach ($data as $item) {
-                echo '<option value="'.$item['id'].'">'.$item['tag'].'</option>';
+            foreach ($data['taglist'] as $item) {
+                $selected = '';
+                foreach ($data['data'] as $selectedItem) {
+                    if ($item['id'] === $selectedItem['id']) {
+                        $selected = 'selected';
+                    }
+                }
+                echo '<option value="'.$item['id'].'" '.$selected.'>'.$item['tag'].'</option>';
             }
             ?>
         </select>
