@@ -108,7 +108,7 @@ class PostController
         return [
             'title' => 'New post',
             'content' => 'create.php',
-            'data' => $tags
+            'data' => ['taglist' => $tags]
         ];
     }
 
@@ -136,14 +136,30 @@ class PostController
                 ]);
 
                 $valid_data = $gump->run($_POST);
+                // prepare the parts to be returned on error
+                $taglist = $this->model->getTags();
+                $contents = [
+                    'title' => $_POST['title'],
+                    'content' => $_POST['message'],
+                ];
+                $completeSubarray = [];
+                foreach ($_POST['tag'] as $tag) {
+                    $temp = ['id' => $tag];
+                    $completeSubarray[] = array_merge($contents, $temp);
+                }
+                // prepare the parts to be returned on error END
 
                 if ($gump->errors()) {
                     $errors = $gump->get_errors_array();
                     return [
                         'title' => 'New post',
                         'content' => 'create.php',
-                        'data' => ['errors' => $errors]
-                ];
+                        'data' => [
+                            'errors' => $errors,
+                            'data' => $completeSubarray,
+                            'taglist' => $taglist
+                        ]
+                    ];
                 } else {
                     // Save the new post in the DB
                     $result = $this->model->save($valid_data);
@@ -151,7 +167,11 @@ class PostController
                         return [
                             'title' => 'New post',
                             'content' => 'create.php',
-                            'data' => $result
+                            'data' => [
+                                'error' => $result['error'],
+                                'data' => $completeSubarray,
+                                'taglist' => $taglist
+                            ]
                         ];
                     } else {
                         $_POST = [];
