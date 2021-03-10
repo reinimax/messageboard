@@ -238,6 +238,7 @@ class PostController
             $id = (int) $_GET['id'];
         }
         $result = $this->model->edit($id);
+        $taglist = $this->model->getTags();
         if (isset($result['error'])) {
             $error= urlencode($result['error']);
             header('Location:/index.php?error='.$error);
@@ -246,7 +247,10 @@ class PostController
         return [
             'title' => 'Edit post',
             'content' => 'edit.php',
-            'data' => ['data' => $result]
+            'data' => [
+                'data' => $result,
+                'taglist' => $taglist
+                ]
         ];
     }
 
