@@ -50,19 +50,25 @@ class PostModel
     public function search($parameters)
     {
         $getPostsByTitle = <<<SQL
-            SELECT posts.id, posts.title, posts.content, posts.created_at, posts.updated_at, users.user FROM posts 
+            SELECT posts.id, posts.title, posts.content, posts.created_at, posts.updated_at, users.user, tags.tag FROM posts
+            LEFT JOIN posts_tags AS pt ON (posts.id = pt.post_id)
+            LEFT JOIN tags ON (pt.tag_id = tags.id) 
             JOIN users ON (posts.user_id = users.id) WHERE MATCH(posts.title) AGAINST(:query)
             ORDER BY posts.updated_at DESC;
         SQL;
 
         $getPostsByUser = <<<SQL
-            SELECT posts.id, posts.title, posts.content, posts.created_at, posts.updated_at, users.user FROM posts 
+            SELECT posts.id, posts.title, posts.content, posts.created_at, posts.updated_at, users.user, tags.tag FROM posts
+            LEFT JOIN posts_tags AS pt ON (posts.id = pt.post_id)
+            LEFT JOIN tags ON (pt.tag_id = tags.id) 
             JOIN users ON (posts.user_id = users.id) WHERE MATCH(users.user) AGAINST(:query)
             ORDER BY posts.updated_at DESC;
         SQL;
 
         $getPostsAll = <<<SQL
-            SELECT posts.id, posts.title, posts.content, posts.created_at, posts.updated_at, users.user FROM posts 
+            SELECT posts.id, posts.title, posts.content, posts.created_at, posts.updated_at, users.user, tags.tag FROM posts
+            LEFT JOIN posts_tags AS pt ON (posts.id = pt.post_id)
+            LEFT JOIN tags ON (pt.tag_id = tags.id) 
             JOIN users ON (posts.user_id = users.id) WHERE MATCH(posts.title, posts.content) AGAINST(:query) OR
             MATCH(users.user) AGAINST(:query)
             ORDER BY posts.updated_at DESC;
@@ -76,7 +82,7 @@ class PostModel
             }
             $statement->bindParam(':query', $parameters['query'], PDO::PARAM_STR);
             $statement->execute();
-            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $result = $statement->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_ASSOC);
             $count = $statement->rowCount();
         } catch (PDOException $e) {
             return false;
