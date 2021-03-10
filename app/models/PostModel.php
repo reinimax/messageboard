@@ -70,14 +70,31 @@ class PostModel
             LEFT JOIN posts_tags AS pt ON (posts.id = pt.post_id)
             LEFT JOIN tags ON (pt.tag_id = tags.id) 
             JOIN users ON (posts.user_id = users.id) WHERE MATCH(posts.title, posts.content) AGAINST(:query) OR
-            MATCH(users.user) AGAINST(:query)
-            ORDER BY posts.updated_at DESC;
+            MATCH(users.user) AGAINST(:query) OR posts.id IN (
+                SELECT posts.id FROM posts
+                LEFT JOIN posts_tags AS pt ON (posts.id = pt.post_id)
+                LEFT JOIN tags ON (pt.tag_id = tags.id) 
+                WHERE MATCH(tags.tag) AGAINST(:query) 
+            ) ORDER BY posts.updated_at DESC;
+        SQL;
+
+        $getPostsTags = <<<SQL
+            SELECT posts.id, posts.title, posts.content, posts.created_at, posts.updated_at, users.user, tags.tag FROM posts
+            LEFT JOIN posts_tags AS pt ON (posts.id = pt.post_id)
+            LEFT JOIN tags ON (pt.tag_id = tags.id) 
+            JOIN users ON (posts.user_id = users.id) WHERE posts.id IN (
+                SELECT posts.id FROM posts
+                LEFT JOIN posts_tags AS pt ON (posts.id = pt.post_id)
+                LEFT JOIN tags ON (pt.tag_id = tags.id) 
+                WHERE MATCH(tags.tag) AGAINST(:query) 
+            ) ORDER BY posts.updated_at DESC;
         SQL;
 
         try {
             switch ($parameters['limit']) {
                 case 'title': $statement = $this->pdo->prepare($getPostsByTitle); break;
                 case 'user': $statement = $this->pdo->prepare($getPostsByUser); break;
+                case 'tag': $statement = $this->pdo->prepare($getPostsTags); break;
                 default: $statement = $this->pdo->prepare($getPostsAll);
             }
             $statement->bindParam(':query', $parameters['query'], PDO::PARAM_STR);
