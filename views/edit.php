@@ -1,10 +1,6 @@
 <?php
 use app\lib\Session;
 
-echo '<pre>';
-var_dump($data);
-echo '</pre>';
-
 echo $key =  implode('', array_keys($data['data']));
 
 ?>
