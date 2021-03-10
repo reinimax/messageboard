@@ -368,4 +368,65 @@ class PostController
             exit;
         }
     }
+
+    /**
+     * Create a new tag
+     */
+    public function createtag()
+    {
+        $this->checkLogin();
+        if (!empty($_POST)) {
+            if (hash_equals(Session::init()->getCsrfToken(), $_POST['_token'])) {
+                // Validation
+                $gump = new \GUMP();
+                $gump->filter_rules(['newtag' => 'trim|sanitize_string']);
+                $gump->validation_rules(['newtag' => 'required']);
+                $gump->set_fields_error_messages([
+                    'newtag' => ['required' => 'This field is required']
+                ]);
+                $valid_data = $gump->run($_POST);
+
+                if ($gump->errors()) {
+                    $errors = $gump->get_errors_array();
+                    return [
+                        'title' => 'New tag',
+                        'content' => 'createtag.php',
+                        'data' => [
+                            'errors' => $errors
+                        ]
+                    ];
+                } else {
+                    // Save the new tag in the DB
+                    $result = $this->model->createtag($valid_data);
+                    if (isset($result['error'])) {
+                        return [
+                            'title' => 'New tag',
+                            'content' => 'createtag.php',
+                            'data' => [
+                                'error' => $result['error']
+                            ]
+                        ];
+                    } else {
+                        $_POST = [];
+                        $success= urlencode($result['success']);
+                        header('Location:/index.php?success='.$success);
+                        exit;
+                    }
+                }
+            } else {
+                // if CSRF Validation failed
+                return [
+                    'title' => 'New tag',
+                    'content' => 'createtag.php',
+                    'data' => ['error' => 'Post could not be saved']
+                ];
+            }
+        } else {
+            // if $_POST is empty
+            return [
+                'title' => 'New tag',
+                'content' => 'createtag.php'
+            ];
+        }
+    }
 }
