@@ -83,14 +83,13 @@ class PostModel
             $statement->bindParam(':query', $parameters['query'], PDO::PARAM_STR);
             $statement->execute();
             $result = $statement->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_ASSOC);
-            $count = $statement->rowCount();
         } catch (PDOException $e) {
             return false;
         }
         if (!$result) {
             return false;
         }
-        return ['result' => $result, 'count' => $count];
+        return $result;
     }
 
     /**
