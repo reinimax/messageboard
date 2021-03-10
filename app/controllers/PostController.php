@@ -77,13 +77,14 @@ class PostController
                 ],
             ];
         }
+        $count = count($data);
         return [
             'title' => 'Index',
             'content' => 'index.php',
             'data' => [
-                'data' => $data['result'],
+                'data' => $data,
                 'title' => 'Your results',
-                'success' => 'Your search for "'.$valid['query'].'" yielded '.$data['count'].' results'
+                'success' => 'Your search for "'.$valid['query'].'" yielded '.$count.' results'
             ],
         ];
     }
