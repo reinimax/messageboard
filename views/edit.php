@@ -43,6 +43,10 @@ class="needs-validation border border-primary mx-auto w-50 p-4" novalidate>
             ?>
         </select>
     </div>
+    <div class="alert alert-info">
+        Don't find the right tag? <a href="/createtag" class="alert-link">Create one!</a>.
+        <p class="small">(<strong>Important!</strong> Your message will not be saved if you do this!)</p>
+    </div>
     <input type="hidden" name="_token" value="<?php echo Session::init()->setCsrfToken(); ?>">
     <input type="hidden" name="_method" value="put">
     <div class="form-group">
