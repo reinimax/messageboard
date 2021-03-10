@@ -208,7 +208,7 @@ class PostModel
     public function edit($id)
     {
         $getPost = <<<SQL
-            SELECT posts.*, tags.tag FROM posts 
+            SELECT posts.*, tags.* FROM posts 
             LEFT JOIN posts_tags AS pt ON (posts.id = pt.post_id)
             LEFT JOIN tags ON (pt.tag_id = tags.id) 
             WHERE posts.id=:id;
