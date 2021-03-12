@@ -32,6 +32,10 @@ class UserController
     public function settings()
     {
         $data = $this->model->settings($this->userId);
+        if (!is_array($data)) {
+            header('Location:/logout.php');
+            exit;
+        }
         return [
             'title' => 'About me',
             'content' => 'settings.php',
