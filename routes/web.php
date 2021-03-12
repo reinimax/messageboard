@@ -21,3 +21,4 @@ $app->registerGet('/createtag', [app\controllers\PostController::class, 'createt
 $app->registerPost('/createtag', [app\controllers\PostController::class, 'createtag']);
 
 $app->registerGet('/settings', [app\controllers\UserController::class, 'settings']);
+$app->registerPut('/settings', [app\controllers\UserController::class, 'update']);
