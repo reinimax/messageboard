@@ -2,6 +2,8 @@
 
 use app\lib\Session;
 
+$csrf = Session::init()->setCsrfToken();
+
 echo '<h1>My Settings</h1>';
 
 if (!empty($data['success'])) {
@@ -36,17 +38,18 @@ class="needs-validation m-4" novalidate>
     <div class="form-group">
         <label for="location">My location</label>
         <input type="text" class="form-control <?php echo ($data['errors']['location']) ? 'is-invalid' : ''; ?>" 
-        id="location" name="location" placeholder="Your location ..." value="<?php echo $data['data']['location']; ?>">
+        id="location" name="location" placeholder="Your location ..." value="<?php echo $_POST['location'] ?? $data['data']['location']; ?>">
         <div class="invalid-feedback"><?php echo $data['errors']['location'] ?? ''; ?></div> 
     </div>
     <div class="form-group">
         <label for="description">My description</label>
         <textarea class="form-control <?php echo ($data['errors']['description']) ? 'is-invalid' : ''; ?>" 
-        id="description" name="description" placeholder="Describe yourself ..."><?php echo $data['data']['description']; ?></textarea>
+        id="description" name="description" placeholder="Describe yourself ..."><?php echo $_POST['description'] ?? $data['data']['description']; ?></textarea>
         <div class="invalid-feedback"><?php echo $data['errors']['description'] ?? ''; ?></div> 
     </div>
-    <input type="hidden" name="_token" value="<?php echo Session::init()->setCsrfToken(); ?>">
+    <input type="hidden" name="_token" value="<?php echo $csrf; ?>">
     <input type="hidden" name="_method" value="put">
+    <input type="hidden" name="_update" value="info">
     <div class="form-group">
         <input type="submit" class="btn btn-primary w-100" value="Save your infos">
     </div>
@@ -78,8 +81,9 @@ class="needs-validation" novalidate>
         id="confirm" name="confirm" required>
         <div class="invalid-feedback"><?php echo $data['errors']['confirm'] ?? ''; ?></div> 
     </div>
-    <input type="hidden" name="_token" value="<?php echo Session::init()->setCsrfToken(); ?>">
+    <input type="hidden" name="_token" value="<?php echo $csrf; ?>">
     <input type="hidden" name="_method" value="put">
+    <input type="hidden" name="_update" value="pwd">
     <div class="form-group">
         <input type="submit" class="btn btn-danger w-100" value="Change your password">
     </div>
@@ -97,7 +101,7 @@ class="needs-validation" novalidate>
         <div class="invalid-feedback"><?php echo $data['errors']['confirm'] ?? ''; ?></div> 
     </div>
     <div><strong>Warning: </strong>This action cannot be undone</div>
-    <input type="hidden" name="_token" value="<?php echo Session::init()->setCsrfToken(); ?>">
+    <input type="hidden" name="_token" value="<?php echo $csrf; ?>">
     <input type="hidden" name="_method" value="delete">
     <div class="form-group">
         <input type="submit" class="btn btn-danger w-100" value="Delete your account">
