@@ -357,13 +357,13 @@ class PostController
                 }
             } else {
                 // if CSRF Validation failed
-                $error= urlencode('Ups, something went wrong ...');
+                $error= urlencode('Ups, something went wrong %2E%2E%2E');
                 header('Location:/index.php?error='.$error);
                 exit;
             }
         } else {
             // if $_POST is empty
-            $error= urlencode('Ups, something went wrong ...');
+            $error= urlencode('Ups, something went wrong %2E%2E%2E');
             header('Location:/index.php?error='.$error);
             exit;
         }
