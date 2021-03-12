@@ -35,7 +35,9 @@ class UserController
         return [
             'title' => 'About me',
             'content' => 'settings.php',
-            'data' => $data
+            'data' => [
+                'data' => $data,
+            ]
         ];
     }
 }
