@@ -27,7 +27,7 @@ class PostModel
             LEFT JOIN posts_tags AS pt ON (posts.id = pt.post_id)
             LEFT JOIN tags ON (pt.tag_id = tags.id)
             JOIN users ON (posts.user_id = users.id) 
-            ORDER BY posts.updated_at DESC LIMIT 10;
+            ORDER BY posts.updated_at DESC;
         SQL;
 
         try {
