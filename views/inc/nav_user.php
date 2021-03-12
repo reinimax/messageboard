@@ -7,12 +7,11 @@
       <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
         <strong><?php echo $_SESSION['user']; ?></strong>
       </a>
-      <div class="dropdown-menu">
+      <div class="dropdown-menu dropdown-menu-right">
         <a class="dropdown-item" href="/show.php">Show all my posts</a>
+        <a class="dropdown-item" href="/settings.php">Settings</a>
+        <a class="dropdown-item" href="/logout.php">Logout</a>
       </div>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link btn btn-outline-info mx-2" href="/logout">Logout</a>
     </li>
   </ul>
 </nav>
