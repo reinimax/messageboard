@@ -44,4 +44,113 @@ class UserController
             ]
         ];
     }
+
+    /**
+     * Update user data
+     * @return array The data and view to be loaded
+     */
+    public function update()
+    {
+        if (!isset($_GET['id'])) {
+            $error= urlencode('Ups, something went wrong %2E%2E%2E');
+            header('Location:/index.php?error='.$error);
+            exit;
+        } else {
+            $id = (int) $_GET['id'];
+        }
+
+        // Validate POST
+        if (!empty($_POST)) {
+            if (hash_equals(Session::init()->getCsrfToken(), $_POST['_token'])) {
+                // Validation
+                $gump = new \GUMP();
+
+                if ($_POST['_update'] === 'info') {
+                    $gump->filter_rules([
+                        'birthday' => 'trim|sanitize_string',
+                        'location' => 'trim|sanitize_string',
+                        'description' => 'trim|sanitize_string'
+                    ]);
+
+                    $gump->validation_rules([
+                        'birthday' => 'date'
+                    ]);
+                } elseif ($_POST['_update'] === 'pwd') {
+                    $gump->filter_rules([
+                        'pwd' => 'trim|sanitize_string',
+                        'pwdrepeat' => 'trim|sanitize_string',
+                        'confirm' => 'trim|sanitize_string'
+                    ]);
+                    $lowercase = '/[a-z]/';
+                    $uppercase = '/[A-Z]/';
+                    $digit = '/[0-9]/';
+                    $gump->validation_rules([
+                        'pwd' => 'required|max_len,64|min_len,8|equalsfield,pwdrepeat|regex,'.$lowercase.
+                        '|regex,'.$uppercase.'|regex,'.$digit
+                    ]);
+
+                    $gump->set_fields_error_messages([
+                        'pwd' => [
+                            'required' => 'The Password field is required',
+                            'max_len' => 'The Password must not be longer than {param} characters',
+                            'min_len' => 'The Password must have at least {param} characters',
+                            'regex' => 'The Password must contain uppercase and lowercase letters and one digit'
+                        ]
+                    ]);
+                } else {
+                    $error= urlencode('Ups, something went wrong %2E%2E%2E');
+                    header('Location:/index.php?error='.$error);
+                    exit;
+                }
+
+                $valid_data = $gump->run($_POST);
+                $data = $this->model->settings($this->userId);
+                if ($gump->errors()) {
+                    $errors = $gump->get_errors_array();
+                    return [
+                        'title' => 'About me',
+                        'content' => 'settings.php',
+                        'data' => [
+                            'data' => $data,
+                            'errors' => $errors,
+                        ]
+                    ];
+                } else {
+                    // Update userdata
+                    $result = $this->model->update($this->userId, $valid_data);
+                    if (isset($result['error'])) {
+                        return [
+                            'title' => 'About me',
+                            'content' => 'settings.php',
+                            'data' => [
+                                'error' => $result['error'],
+                                'data' => $data
+                            ]
+                        ];
+                    } else {
+                        $_POST = [];
+                        $data = $this->model->settings($this->userId);
+                        return [
+                            'title' => 'About me',
+                            'content' => 'settings.php',
+                            'data' => [
+                                'success' => $result['success'],
+                                'data' => $data
+                            ]
+                        ];
+                    }
+                }
+            } else {
+                // if CSRF Validation failed
+                $error= urlencode('Ups, something went wrong %2E%2E%2E');
+                header('Location:/index.php?error='.$error);
+                exit;
+            }
+        } else {
+            // if $_POST is empty
+            $error= urlencode('Ups, something went wrong %2E%2E%2E');
+            header('Location:/index.php?error='.$error);
+            exit;
+        }
+    }
 }
