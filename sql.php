@@ -23,6 +23,9 @@ $createUsers = <<<SQL
         user VARCHAR(100) NOT NULL UNIQUE,
         email VARCHAR(100) NOT NULL UNIQUE,
         pwd VARCHAR(255) NOT NULL,
+        descr VARCHAR(255),
+        location VARCHAR(100),
+        birthday DATE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY(id),
         FULLTEXT(user)
