@@ -19,7 +19,7 @@ class UserModel
     /**
      * Loads the data of the current user
      * @param int $id The id of the current user
-     * @return array/string The user data on success, the error message on failure
+     * @return array/false The user data on success, false on failure
      */
     public function settings($id)
     {
@@ -34,7 +34,10 @@ class UserModel
             $statement = $this->pdo->query($getUser);
             $result = $statement->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            return $e->getMessage();
+            return false;
+        }
+        if (!$result) {
+            return false;
         }
         return $result;
     }
