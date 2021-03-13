@@ -105,4 +105,33 @@ class UserModel
         return ['success' => 'You successfully updated your profile'];
         ;
     }
+
+    /**
+     * Delete the user
+     * @param int $id The id of the logged in user
+     * @param array $data The sent data from the settings.php form
+     * @return array with the success- or error-message
+     */
+    public function delete($id, $data)
+    {
+        // check if the password is correct
+        if ($this->checkPwd($id, $data['confirmdelete']) === false) {
+            return ['error' => 'Wrong password'];
+        }
+
+        $deleteUser = <<<SQL
+            DELETE FROM users WHERE id=$id;
+        SQL;
+
+        try {
+            $statement = $this->pdo->query($deleteUser);
+            if ($statement->rowCount() === 0) {
+                return ['error' => 'Sorry, something went wrong'];
+            }
+        } catch (PDOException $e) {
+            return ['error' => $e->getMessage()];
+        }
+        return ['success' => 'Your profile has been successfully deleted'];
+        ;
+    }
 }
