@@ -90,7 +90,7 @@ class UserController
                         ]
                     ]);
                 } else {
-                    $error= urlencode('Ups, something went wrong %2E%2E%2E');
+                    $error= str_replace('.', '%2E', urlencode('Ups, something went wrong ...'));
                     header('Location:/index.php?error='.$error);
                     exit;
                 }
@@ -146,7 +146,7 @@ class UserController
             }
         } else {
             // if $_POST is empty
-            $error= urlencode('Ups, something went wrong %2E%2E%2E');
+            $error= str_replace('.', '%2E', urlencode('Ups, something went wrong ...'));
             header('Location:/index.php?error='.$error);
             exit;
         }
@@ -195,20 +195,20 @@ class UserController
                     } else {
                         $_POST = [];
                         Session::init()->destroySession();
-                        $success= urlencode($result['success']);
+                        $success= str_replace('.', '%2E', urlencode($result['success']));
                         header('Location:/index.php?success='.$success);
                         exit;
                     }
                 }
             } else {
                 // if CSRF Validation failed
-                $error= urlencode('Ups, something went wrong %2E%2E%2E');
+                $error= str_replace('.', '%2E', urlencode('Ups, something went wrong ...'));
                 header('Location:/index.php?error='.$error);
                 exit;
             }
         } else {
             // if $_POST is empty
-            $error= urlencode('Ups, something went wrong %2E%2E%2E');
+            $error= str_replace('.', '%2E', urlencode('Ups, something went wrong ...'));
             header('Location:/index.php?error='.$error);
             exit;
         }

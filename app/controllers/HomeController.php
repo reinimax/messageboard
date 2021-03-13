@@ -147,7 +147,7 @@ class HomeController
                     } else {
                         $_POST = [];
                         Session::init()->setLogin($result);
-                        $success= urlencode('Login was successful%2E Welcome back!');
+                        $success= str_replace('.', '%2E', urlencode('Login was successful. Welcome back!'));
                         // go to index
                         header('Location:/index.php?success='.$success);
                         exit;

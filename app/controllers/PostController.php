@@ -232,11 +232,11 @@ class PostController
         }
         $result = $this->model->delete($id);
         if (isset($result['error'])) {
-            $error= urlencode($result['error']);
+            $error= str_replace('.', '%2E', urlencode($result['error']));
             header('Location:/index.php?error='.$error);
             exit;
         } elseif (isset($result['success'])) {
-            $success= urlencode($result['success']);
+            $success= str_replace('.', '%2E', urlencode($result['success']));
             header('Location:/index.php?success='.$success);
             exit;
         }
@@ -260,7 +260,7 @@ class PostController
         $result = $this->model->edit($id);
         $taglist = $this->model->getTags();
         if (isset($result['error'])) {
-            $error= urlencode($result['error']);
+            $error= str_replace('.', '%2E', urlencode($result['error']));
             header('Location:/index.php?error='.$error);
             exit;
         }
@@ -350,20 +350,20 @@ class PostController
                         ];
                     } else {
                         $_POST = [];
-                        $success= urlencode($result['success']);
+                        $success= str_replace('.', '%2E', urlencode($result['success']));
                         header('Location:/index.php?success='.$success);
                         exit;
                     }
                 }
             } else {
                 // if CSRF Validation failed
-                $error= urlencode('Ups, something went wrong %2E%2E%2E');
+                $error= str_replace('.', '%2E', urlencode('Ups, something went wrong ...'));
                 header('Location:/index.php?error='.$error);
                 exit;
             }
         } else {
             // if $_POST is empty
-            $error= urlencode('Ups, something went wrong %2E%2E%2E');
+            $error= str_replace('.', '%2E', urlencode('Ups, something went wrong ...'));
             header('Location:/index.php?error='.$error);
             exit;
         }
@@ -408,7 +408,7 @@ class PostController
                         ];
                     } else {
                         $_POST = [];
-                        $success= urlencode($result['success']);
+                        $success= str_replace('.', '%2E', urlencode($result['success']));
                         header('Location:/index.php?success='.$success);
                         exit;
                     }
