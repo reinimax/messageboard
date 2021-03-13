@@ -140,6 +140,68 @@ class UserController
                 }
             } else {
                 // if CSRF Validation failed
+                $error= str_replace('.', '%2E', urlencode('Ups, something went wrong ...'));
+                header('Location:/index.php?error='.$error);
+                exit;
+            }
+        } else {
+            // if $_POST is empty
+            $error= urlencode('Ups, something went wrong %2E%2E%2E');
+            header('Location:/index.php?error='.$error);
+            exit;
+        }
+    }
+
+    /**
+     * Delete the user
+     * @return void/array
+     */
+    public function delete()
+    {
+        // Validate POST
+        if (!empty($_POST)) {
+            if (hash_equals(Session::init()->getCsrfToken(), $_POST['_token'])) {
+                // Validation
+                $gump = new \GUMP();
+                $gump->filter_rules(['confirmdelete' => 'trim|sanitize_string']);
+                $gump->validation_rules(['confirmdelete' => 'required']);
+                $gump->set_fields_error_messages([
+                        'confirmdelete' => ['required' => 'You must enter your password to confirm the action']
+                ]);
+                $valid_data = $gump->run($_POST);
+                $data = $this->model->settings($this->userId);
+                if ($gump->errors()) {
+                    $errors = $gump->get_errors_array();
+                    return [
+                        'title' => 'About me',
+                        'content' => 'settings.php',
+                        'data' => [
+                            'data' => $data,
+                            'errors' => $errors,
+                        ]
+                    ];
+                } else {
+                    // Delete user
+                    $result = $this->model->delete($this->userId, $valid_data);
+                    if (isset($result['error'])) {
+                        return [
+                            'title' => 'About me',
+                            'content' => 'settings.php',
+                            'data' => [
+                                'error' => $result['error'],
+                                'data' => $data
+                            ]
+                        ];
+                    } else {
+                        $_POST = [];
+                        Session::init()->destroySession();
+                        $success= urlencode($result['success']);
+                        header('Location:/index.php?success='.$success);
+                        exit;
+                    }
+                }
+            } else {
+                // if CSRF Validation failed
                 $error= urlencode('Ups, something went wrong %2E%2E%2E');
                 header('Location:/index.php?error='.$error);
                 exit;
