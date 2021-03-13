@@ -51,14 +51,6 @@ class UserController
      */
     public function update()
     {
-        if (!isset($_GET['id'])) {
-            $error= urlencode('Ups, something went wrong %2E%2E%2E');
-            header('Location:/index.php?error='.$error);
-            exit;
-        } else {
-            $id = (int) $_GET['id'];
-        }
-
         // Validate POST
         if (!empty($_POST)) {
             if (hash_equals(Session::init()->getCsrfToken(), $_POST['_token'])) {
