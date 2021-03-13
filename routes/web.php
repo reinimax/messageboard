@@ -22,3 +22,4 @@ $app->registerPost('/createtag', [app\controllers\PostController::class, 'create
 
 $app->registerGet('/settings', [app\controllers\UserController::class, 'settings']);
 $app->registerPut('/settings', [app\controllers\UserController::class, 'update']);
+$app->registerDelete('/settings', [app\controllers\UserController::class, 'delete']);
