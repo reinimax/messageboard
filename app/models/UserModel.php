@@ -17,6 +17,16 @@ class UserModel
         $this->pdo = MySql::init($config);
     }
 
+    protected function checkPwd($id, $pwd)
+    {
+        $getPwd = <<<SQL
+            SELECT pwd FROM users WHERE id=$id;
+        SQL;
+        $statement = $this->pdo->query($getPwd);
+        $hash = $statement->fetch(PDO::FETCH_COLUMN);
+        return password_verify($pwd, $hash);
+    }
+
     /**
      * Loads the data of the current user
      * @param int $id The id of the current user
@@ -51,14 +61,9 @@ class UserModel
      */
     public function update($id, $data)
     {
-        // if the user wants to change the password, check of the old password is correct
+        // if the user wants to change the password, check if the old password is correct
         if ($data['_update'] === 'pwd') {
-            $getPwd = <<<SQL
-                SELECT pwd FROM users WHERE id=$id;
-            SQL;
-            $statement = $this->pdo->query($getPwd);
-            $pwd = $statement->fetch(PDO::FETCH_COLUMN);
-            if (!password_verify($data['confirm'], $pwd)) {
+            if ($this->checkPwd($id, $data['confirm']) === false) {
                 return ['error' => 'Wrong password'];
             }
         }
