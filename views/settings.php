@@ -18,7 +18,7 @@ var_dump($data['data']);
 echo '</pre>'; */
 ?>
 
-<form action="/settings.php?id=<?php echo $data['data']['id']; ?>" method="POST" 
+<form action="/settings.php" method="POST" 
 class="needs-validation m-4" novalidate>
     <h4 class="">About you</h4>
     <div class="form-group">
@@ -58,7 +58,7 @@ class="needs-validation m-4" novalidate>
 <div class="alert alert-danger m-4">
 <h4 class="text-center">Danger zone!</h4>
 
-<form action="/settings.php?id=<?php echo $data['data']['id']; ?>" method="POST" 
+<form action="/settings.php" method="POST" 
 class="needs-validation" novalidate>
     <h5 class="">Change password</h5>
     <div class="form-group">
@@ -89,7 +89,7 @@ class="needs-validation" novalidate>
     </div>
 </form>
 
-<form action="/settings.php?id=<?php echo $data['data']['id']; ?>" method="POST" 
+<form action="/settings.php" method="POST" 
 class="needs-validation" novalidate>
     <h5 class="">Delete account</h5>
     <div class="form-group">
