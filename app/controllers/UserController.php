@@ -129,7 +129,13 @@ class UserController
                         ];
                     } else {
                         $_POST = [];
+                        // retrieve the actualized data to display it
                         $data = $this->model->settings($this->userId);
+                        if (!is_array($data)) {
+                            header('Location:/logout.php');
+                            exit;
+                        }
+                        // return the actualized data with a successmessage
                         return [
                             'title' => 'About me',
                             'content' => 'settings.php',
