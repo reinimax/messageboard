@@ -93,12 +93,12 @@ class="needs-validation" novalidate>
 class="needs-validation" novalidate>
     <h5 class="">Delete account</h5>
     <div class="form-group">
-        <label for="confirm">Password *
+        <label for="confirmdelete">Password *
         <span class="small">(You must enter your password to confirm the action)</span>
         </label>
-        <input type="password" class="form-control <?php echo ($data['errors']['confirm']) ? 'is-invalid' : ''; ?>" 
-        id="confirm" name="confirm" required>
-        <div class="invalid-feedback"><?php echo $data['errors']['confirm'] ?? ''; ?></div> 
+        <input type="password" class="form-control <?php echo ($data['errors']['confirmdelete']) ? 'is-invalid' : ''; ?>" 
+        id="confirmdelete" name="confirmdelete" required>
+        <div class="invalid-feedback"><?php echo $data['errors']['confirmdelete'] ?? ''; ?></div> 
     </div>
     <div><strong>Warning: </strong>This action cannot be undone</div>
     <input type="hidden" name="_token" value="<?php echo $csrf; ?>">
