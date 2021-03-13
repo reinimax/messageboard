@@ -13,9 +13,9 @@ if (!empty($data['error'])) {
     include ROOT.'/views/inc/error.php';
 }
 
-echo '<pre>';
+/* echo '<pre>';
 var_dump($data['data']);
-echo '</pre>';
+echo '</pre>'; */
 ?>
 
 <form action="/settings.php?id=<?php echo $data['data']['id']; ?>" method="POST" 
@@ -44,7 +44,7 @@ class="needs-validation m-4" novalidate>
     <div class="form-group">
         <label for="description">My description</label>
         <textarea class="form-control <?php echo ($data['errors']['description']) ? 'is-invalid' : ''; ?>" 
-        id="description" name="description" placeholder="Describe yourself ..."><?php echo $_POST['description'] ?? $data['data']['description']; ?></textarea>
+        id="description" name="description" placeholder="Describe yourself ..."><?php echo $_POST['description'] ?? $data['data']['descr']; ?></textarea>
         <div class="invalid-feedback"><?php echo $data['errors']['description'] ?? ''; ?></div> 
     </div>
     <input type="hidden" name="_token" value="<?php echo $csrf; ?>">
