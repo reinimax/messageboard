@@ -28,6 +28,28 @@ class UserModel
     }
 
     /**
+     * Get the number of posts from a user
+     * @param int $id The id of the user
+     * @return int The number of posts. A PDOException also returns 0.
+     */
+    public function getNumOfPosts($id)
+    {
+        // Here, $id may come from $_GET or so, therefore the statement needs to be prepared
+        $getNum = <<<SQL
+            SELECT COUNT(*) FROM posts WHERE user_id=:id;
+        SQL;
+
+        try {
+            $statement = $this->pdo->prepare($getNum);
+            $statement->bindParam(':id', $id, PDO::PARAM_INT);
+            $statement->execute();
+            return (int) $statement->fetch(PDO::FETCH_COLUMN);
+        } catch (PDOException $e) {
+            return 0;
+        }
+    }
+
+    /**
      * Loads the data of the current user
      * @param int $id The id of the current user
      * @return array/false The user data on success, false on failure
@@ -41,6 +63,8 @@ class UserModel
             WHERE id=$id;
         SQL;
 
+        $postcount = ['count' => $this->getNumOfPosts($id)];
+
         try {
             $statement = $this->pdo->query($getUser);
             $result = $statement->fetch(PDO::FETCH_ASSOC);
@@ -50,7 +74,7 @@ class UserModel
         if (!$result) {
             return false;
         }
-        return $result;
+        return array_merge($result, $postcount);
     }
 
     /**
