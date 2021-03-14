@@ -16,6 +16,7 @@ if (!empty($data['error'])) {
 /* echo '<pre>';
 var_dump($data['data']);
 echo '</pre>'; */
+
 ?>
 
 <form action="/settings.php" method="POST" 
@@ -28,6 +29,15 @@ class="needs-validation m-4" novalidate>
     <div class="form-group">
         <label for="email">My email</label>
         <input type="text" id="email" class="form-control" value="<?php echo $data['data']['email']; ?>" disabled>
+    </div>
+    <div class="form-group">
+        <label for="since">Member since</label>
+        <input type="text" id="since" class="form-control" value="<?php
+        echo DateTime::createFromFormat('Y-m-d H:i:s', $data['data']['created_at'])->format('M jS, Y'); ?>" disabled>
+    </div>
+    <div class="form-group">
+        <label for="numposts">Number of posts</label>
+        <input type="text" id="numposts" class="form-control" value="<?php echo $data['data']['count']; ?>" disabled>
     </div>
     <div class="form-group">
         <label for="birthday">My birthday</label>
