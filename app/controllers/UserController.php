@@ -65,7 +65,9 @@ class UserController
                     ]);
 
                     $gump->validation_rules([
-                        'birthday' => 'date'
+                        'birthday' => 'date',
+                        'location' => 'max_len,100',
+                        'description' => 'max_len,255'
                     ]);
                 } elseif ($_POST['_update'] === 'pwd') {
                     $gump->filter_rules([
