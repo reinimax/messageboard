@@ -17,7 +17,21 @@ if (!empty($data['error'])) {
 var_dump($data['data']);
 echo '</pre>'; */
 
+// Get the default avatar and save it in a variable.
+$test = imagecreatefrompng(ROOT.'/uploads/avatars/default.png');
+ob_start();
+imagepng($test, null, 0, null);
+$avatardefault = ob_get_contents();
+ob_end_clean();
 ?>
+
+<!-- Display the avatar via the data URI scheme -->
+<img src="<?php echo 'data:media_type;base64,'.base64_encode($avatardefault); ?>" class="circle" alt="Your avatar"> 
+ 
+<form action="/settings.php" method="POST" enctype="multipart/form-data">
+  <input type="file" name="avatar">
+  <input type="submit" value="+">
+</form> 
 
 <form action="/settings.php" method="POST" 
 class="needs-validation m-4" novalidate>
