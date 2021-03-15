@@ -23,7 +23,7 @@ class PostModel
     public function index()
     {
         $getPosts = <<<SQL
-            SELECT posts.id, posts.title, posts.content, posts.created_at, posts.updated_at, users.user, tags.tag FROM posts
+            SELECT posts.id, posts.title, posts.content, posts.created_at, posts.updated_at, users.user, users.avatar, tags.tag FROM posts
             LEFT JOIN posts_tags AS pt ON (posts.id = pt.post_id)
             LEFT JOIN tags ON (pt.tag_id = tags.id)
             JOIN users ON (posts.user_id = users.id) 
