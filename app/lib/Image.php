@@ -1,7 +1,9 @@
 <?php
+
 namespace app\lib;
 
-class Image {
+class Image
+{
     protected $type;
     protected $src;
     protected $srcW;
@@ -10,7 +12,8 @@ class Image {
     protected $destW;
     protected $destH;
 
-    public function __construct($src) {
+    public function __construct($src)
+    {
         $info = getimagesize($src);
         $this->srcW = $info[0];
         $this->srcH = $info[1];
@@ -27,11 +30,16 @@ class Image {
      * @param mixed $filename
      * @return bool
      */
-    protected function createImage($filename) {
-        switch($this->type) {
+    protected function createImage($filename)
+    {
+        switch ($this->type) {
             case 'gif': return imagecreatefromgif($filename);
             case 'jpg': return imagecreatefromjpeg($filename);
-            case 'png': return imagecreatefrompng($filename);
+            case 'png':
+                $transparent = imagecreatefrompng($filename);
+                imagealphablending($transparent, true);
+                imagesavealpha($transparent, true);
+                return $transparent;
         }
         return false;
     }
@@ -39,7 +47,8 @@ class Image {
     /**
      * Prevents upsizing
      */
-    protected function preventUpsize() {
+    protected function preventUpsize()
+    {
         if ($this->destW >= $this->srcW || $this->destH >= $this->srcH) {
             $this->destW = $this->srcW;
             $this->destH = $this->srcH;
@@ -53,7 +62,8 @@ class Image {
      * @param bool $preventUpsize [default true]
      * @return $this
      */
-    public function resize(int $size, $resizeY=false, $preventUpsize=true) {
+    public function resize(int $size, $resizeY=false, $preventUpsize=true)
+    {
         if ($resizeY) {
             $this->destH = $size;
             $this->destW = $this->srcW * ($size/$this->srcH);
@@ -61,7 +71,9 @@ class Image {
             $this->destW = $size;
             $this->destH = $this->srcH * ($size/$this->srcW);
         }
-        if ($preventUpsize) $this->preventUpsize();
+        if ($preventUpsize) {
+            $this->preventUpsize();
+        }
         $this->dest = imagecreatetruecolor($this->destW, $this->destH);
         imagecopyresized($this->dest, $this->src, 0, 0, 0, 0, $this->destW, $this->destH, $this->srcW, $this->srcH);
         return $this;
@@ -73,9 +85,10 @@ class Image {
      * @param bool $preventUpsize [default true]
      * @return $this
      */
-    public function square(int $size, $preventUpsize=true) {
+    public function square(int $size, $preventUpsize=true)
+    {
         // set a square whose sidelength equals the shorter side of the image
-            // if landscape
+        // if landscape
         if ($this->srcW >= $this->srcH) {
             $srcX = $this->srcW/2 - $this->srcH/2;
             $srcY = 0;
@@ -84,14 +97,21 @@ class Image {
             // if portrait
             $srcX = 0;
             $srcY = $this->srcH/2 - $this->srcW/2;
-            $srcSquare = $this->srcW; 
+            $srcSquare = $this->srcW;
         }
         $this->destW = $this->destH = $size;
         // prevent upsizing
         if ($preventUpsize) {
-            if ($size > $srcSquare) $this->destW = $this->destH = $srcSquare;
+            if ($size > $srcSquare) {
+                $this->destW = $this->destH = $srcSquare;
+            }
         }
         $this->dest = imagecreatetruecolor($this->destW, $this->destH);
+        if ($this->type === 'png') {
+            imagesavealpha($this->dest, true);
+            $trans_colour = imagecolorallocatealpha($this->dest, 0, 0, 0, 127);
+            imagefill($this->dest, 0, 0, $trans_colour);
+        }
         imagecopyresized($this->dest, $this->src, 0, 0, $srcX, $srcY, $this->destW, $this->destH, $srcSquare, $srcSquare);
         return $this;
     }
@@ -101,8 +121,9 @@ class Image {
      * @param mixed $filename
      * @return bool
      */
-    public function save($filename) {
-        switch($this->type) {
+    public function save($filename)
+    {
+        switch ($this->type) {
             case 'gif': return imagegif($this->dest ?? $this->src, $filename);
             case 'jpg': return imagejpeg($this->dest ?? $this->src, $filename);
             case 'png': return imagepng($this->dest ?? $this->src, $filename);
@@ -110,4 +131,3 @@ class Image {
         return false;
     }
 }
-?>
