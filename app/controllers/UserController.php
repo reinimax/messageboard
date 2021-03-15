@@ -5,9 +5,11 @@ namespace app\controllers;
 use app\lib\Image;
 use app\models\UserModel;
 use app\lib\Session;
+use app\traits\Avatar;
 
 class UserController
 {
+    use Avatar;
     protected $model;
     protected $userId;
     protected $userName;
@@ -25,26 +27,6 @@ class UserController
         $this->userId = $_SESSION['user_id'];
         $this->userName = $_SESSION['user'];
     }
-
-    protected function getAvatar($filename)
-    {
-        // check if the directory exists
-        if (!is_dir(ROOT.'/uploads/avatars')) {
-            mkdir(ROOT.'/uploads/avatars', 0777, true);
-        }
-        // check if an avatar exists
-        if (file_exists(ROOT.'/uploads/avatars/'.$filename) && !is_dir(ROOT.'/uploads/avatars/'.$filename)) {
-            $imageObj = new Image(ROOT.'/uploads/avatars/'.$filename);
-        } else {
-            $imageObj = new Image(ROOT.'/uploads/avatars/default.png');
-        }
-        ob_start();
-        $imageObj->square(200)->save(null);
-        $avatardefault = ob_get_contents();
-        ob_end_clean();
-        return $avatardefault;
-    }
-
 
     /**
      * Loads the data of the current user
