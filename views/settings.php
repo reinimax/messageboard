@@ -4,7 +4,7 @@ use app\lib\Session;
 
 $csrf = Session::init()->setCsrfToken();
 
-echo '<h1>My Settings</h1>';
+echo '<h1 class="text-center">My Settings</h1>';
 
 if (!empty($data['success'])) {
     include ROOT.'/views/inc/success.php';
@@ -19,40 +19,49 @@ echo '</pre>'; */
 
 // Get the default avatar and save it in a variable.
 $test = imagecreatefrompng(ROOT.'/uploads/avatars/default.png');
+imagealphablending($test, true);
+imagesavealpha($test, true);
 ob_start();
 imagepng($test, null, 0, null);
 $avatardefault = ob_get_contents();
 ob_end_clean();
 ?>
 
-<!-- Display the avatar via the data URI scheme -->
-<img src="<?php echo 'data:media_type;base64,'.base64_encode($avatardefault); ?>" class="circle" alt="Your avatar"> 
- 
-<form action="/settings.php" method="POST" enctype="multipart/form-data">
-  <input type="file" name="avatar">
-  <input type="submit" value="+">
-</form> 
+<div class="row">
+    <div class="col-md-6 d-flex flex-column align-items-center justify-content-around">
+        <!-- Display the avatar via the data URI scheme -->
+        <img src="<?php echo 'data:media_type;base64,'.base64_encode($avatardefault); ?>" 
+        class="border border-primary rounded-circle shadow-lg" alt="Your avatar"> 
+        
+        <form action="/settings.php" method="POST" enctype="multipart/form-data">
+        <input type="file" name="avatar">
+        <input type="submit" value="+">
+        </form> 
+    </div>
 
-<form action="/settings.php" method="POST" 
-class="needs-validation m-4" novalidate>
-    <h4 class="">About you</h4>
-    <div class="form-group">
-        <label for="user">My username</label>
-        <input type="text" id="user" class="form-control" value="<?php echo $_SESSION['user']; ?>" disabled>
+    <div class="col-md-6">
+        <h4 class="">About you</h4>
+        <div class="form-group">
+            <label for="user">My username</label>
+            <input type="text" id="user" class="form-control" value="<?php echo $_SESSION['user']; ?>" disabled>
+        </div>
+        <div class="form-group">
+            <label for="email">My email</label>
+            <input type="text" id="email" class="form-control" value="<?php echo $data['data']['email']; ?>" disabled>
+        </div>
+        <div class="form-group">
+            <label for="since">Member since</label>
+            <input type="text" id="since" class="form-control" value="<?php
+            echo DateTime::createFromFormat('Y-m-d H:i:s', $data['data']['created_at'])->format('M jS, Y'); ?>" disabled>
+        </div>
+        <div class="form-group">
+            <label for="numposts">Number of posts</label>
+            <input type="text" id="numposts" class="form-control" value="<?php echo $data['data']['count']; ?>" disabled>
+        </div>
     </div>
-    <div class="form-group">
-        <label for="email">My email</label>
-        <input type="text" id="email" class="form-control" value="<?php echo $data['data']['email']; ?>" disabled>
-    </div>
-    <div class="form-group">
-        <label for="since">Member since</label>
-        <input type="text" id="since" class="form-control" value="<?php
-        echo DateTime::createFromFormat('Y-m-d H:i:s', $data['data']['created_at'])->format('M jS, Y'); ?>" disabled>
-    </div>
-    <div class="form-group">
-        <label for="numposts">Number of posts</label>
-        <input type="text" id="numposts" class="form-control" value="<?php echo $data['data']['count']; ?>" disabled>
-    </div>
+</div> 
+
+<form action="/settings.php" method="POST" class="needs-validation m-4" novalidate>
     <div class="form-group">
         <label for="birthday">My birthday</label>
         <input type="date" class="form-control <?php echo ($data['errors']['birthday']) ? 'is-invalid' : ''; ?>" 
@@ -78,6 +87,7 @@ class="needs-validation m-4" novalidate>
         <input type="submit" class="btn btn-primary w-100" value="Save your infos">
     </div>
 </form>
+
 
 <div class="alert alert-danger m-4">
 <h4 class="text-center">Danger zone!</h4>
