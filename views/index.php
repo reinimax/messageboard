@@ -49,13 +49,17 @@ foreach ($data['data'] as $key => $item) {
     // create avatar
     $avatar = (new Avatar())->getAvatar($item[0]['avatar']);
 
+    // build username: plain text when logged out, otherwise a link to the profile
+    $username = (Session::init()->checkLogin()) ? '<a class="ml-1" href="/user.php?id='.$item[0]['id'].'">'.$item[0]['user'].
+    '</a>' : $item[0]['user'];
+
     echo '<div class="card my-3">';
     echo '<div class="card-header">';
     echo '<img src="data:media_type;base64,'.base64_encode($avatar).
     '" alt="user avatar" class="border rounded-circle shadow-lg float-left mr-2" width="50" height="50">';
     echo '<div class="d-flex justify-content-between">';
     echo '<strong>'.$item[0]['title'].'</strong>';
-    echo '<span class="d-flex align-items-center">by '.$item[0]['user'].
+    echo '<span class="d-flex align-items-center">by '.$username.
     '<span class="d-flex align-items-center mx-2">'.$edit.$delete.'</span>'.$date.'</span>';
     echo '</div>';
     echo '<div class="d-flex">'.$tags.'</div>';
