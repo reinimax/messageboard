@@ -17,24 +17,16 @@ if (!empty($data['error'])) {
 var_dump($data['data']);
 echo '</pre>'; */
 
-// Get the default avatar and save it in a variable.
-$test = imagecreatefrompng(ROOT.'/uploads/avatars/default.png');
-imagealphablending($test, true);
-imagesavealpha($test, true);
-ob_start();
-imagepng($test, null, 0, null);
-$avatardefault = ob_get_contents();
-ob_end_clean();
 ?>
 
 <div class="row">
     <div class="col-md-6 d-flex flex-column align-items-center justify-content-around">
         <!-- Display the avatar via the data URI scheme -->
-        <img src="<?php echo 'data:media_type;base64,'.base64_encode($avatardefault); ?>" 
+        <img src="<?php echo 'data:media_type;base64,'.base64_encode($data['data']['avatar']); ?>" 
         class="border border-primary rounded-circle shadow-lg" alt="Your avatar"> 
         
-        <form action="/settings.php" method="POST" enctype="multipart/form-data" class="d-flex">
-            <div class="custom-file">
+        <form action="/settings.php" method="POST" enctype="multipart/form-data" class="d-flex flex-wrap">
+            <div id="uploadform" class="custom-file <?php echo ($data['errors']['avatar']) ? 'is-invalid' : ''; ?>">
                 <input type="file" class="custom-file-input" id="avatar" name="avatar">
                 <label class="custom-file-label" for="avatar">Choose file</label>
             </div>
@@ -42,7 +34,8 @@ ob_end_clean();
             <input type="hidden" name="_method" value="put">
             <input type="hidden" name="_update" value="avatar">
             <input type="submit"  class="btn btn-primary" value="Add">
-        </form> 
+            <div class="invalid-feedback"><?php echo $data['errors']['avatar'] ?? ''; ?></div>
+        </form>
         <script>
             document.querySelector('.custom-file-input').addEventListener('change', (e) => {
                 e.target.nextElementSibling.innerText = document.getElementById("avatar").files[0].name;
