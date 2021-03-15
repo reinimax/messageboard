@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\lib\Image;
 use app\models\UserModel;
 use app\lib\Session;
 
@@ -25,6 +26,26 @@ class UserController
         $this->userName = $_SESSION['user'];
     }
 
+    protected function getAvatar($filename)
+    {
+        // check if the directory exists
+        if (!is_dir(ROOT.'/uploads/avatars')) {
+            mkdir(ROOT.'/uploads/avatars', 0777, true);
+        }
+        // check if an avatar exists
+        if (file_exists(ROOT.'/uploads/avatars/'.$filename) && !is_dir(ROOT.'/uploads/avatars/'.$filename)) {
+            $imageObj = new Image(ROOT.'/uploads/avatars/'.$filename);
+        } else {
+            $imageObj = new Image(ROOT.'/uploads/avatars/default.png');
+        }
+        ob_start();
+        $imageObj->square(200)->save(null);
+        $avatardefault = ob_get_contents();
+        ob_end_clean();
+        return $avatardefault;
+    }
+
+
     /**
      * Loads the data of the current user
      * @return array The user data
@@ -36,11 +57,12 @@ class UserController
             header('Location:/logout.php');
             exit;
         }
+        $avatar = ['avatar' => $this->getAvatar($data['avatar'])];
         return [
             'title' => 'About me',
             'content' => 'settings.php',
             'data' => [
-                'data' => $data,
+                'data' => array_merge($data, $avatar),
             ]
         ];
     }
@@ -91,13 +113,15 @@ class UserController
                             'regex' => 'The Password must contain uppercase and lowercase letters and one digit'
                         ]
                     ]);
+                } elseif ($_POST['_update'] === 'avatar') {
+                    $gump->validation_rules(['avatar' => 'extension,png;jpg;gif']);
                 } else {
                     $error= str_replace('.', '%2E', urlencode('Ups, something went wrong ...'));
                     header('Location:/index.php?error='.$error);
                     exit;
                 }
 
-                $valid_data = $gump->run($_POST);
+                $valid_data = $gump->run(array_merge($_POST, $_FILES));
                 $data = $this->model->settings($this->userId);
                 if ($gump->errors()) {
                     $errors = $gump->get_errors_array();
@@ -129,13 +153,22 @@ class UserController
                             header('Location:/logout.php');
                             exit;
                         }
+
+                        // if an avatar was uploaded, resize and save it
+                        if (isset($valid_data['avatar'])) {
+                            $tmp = $valid_data['avatar']['tmp_name'];
+                            $imageObj = new Image($tmp);
+                            $imageObj->square(200)->save(ROOT.'/uploads/avatars/'.$data['avatar']);
+                        }
+                        // load avatar image
+                        $avatar = ['avatar' => $this->getAvatar($data['avatar'])];
                         // return the actualized data with a successmessage
                         return [
                             'title' => 'About me',
                             'content' => 'settings.php',
                             'data' => [
                                 'success' => $result['success'],
-                                'data' => $data
+                                'data' => array_merge($data, $avatar)
                             ]
                         ];
                     }
