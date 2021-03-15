@@ -1,6 +1,7 @@
 <?php
 
 use app\lib\Session;
+use app\traits\Avatar as TraitsAvatar;
 
 if (!empty($data['success'])) {
     include ROOT.'/views/inc/success.php';
@@ -11,6 +12,12 @@ if (!empty($data['error'])) {
 
 if (Session::init()->checkLogin()) {
     include ROOT.'/views/inc/create.php';
+}
+
+// create a class for making avatars
+class Avatar
+{
+    use TraitsAvatar;
 }
 
 /* echo '<pre>';
@@ -39,9 +46,13 @@ foreach ($data['data'] as $key => $item) {
     foreach ($item as $dataset) {
         $tags .= '<span class="badge badge-pill badge-primary mr-1">'.$dataset['tag'].'</span>';
     }
+    // create avatar
+    $avatar = (new Avatar())->getAvatar($item[0]['avatar']);
 
     echo '<div class="card my-3">';
     echo '<div class="card-header">';
+    echo '<img src="data:media_type;base64,'.base64_encode($avatar).
+    '" alt="user avatar" class="border rounded-circle shadow-lg float-left mr-2" width="50" height="50">';
     echo '<div class="d-flex justify-content-between">';
     echo '<strong>'.$item[0]['title'].'</strong>';
     echo '<span class="d-flex align-items-center">by '.$item[0]['user'].
