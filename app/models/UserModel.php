@@ -59,7 +59,7 @@ class UserModel
         // Since $id comes from the Session, and the Session gets it directly from the
         // database, it's not necessary to check it again here.
         $getUser = <<<SQL
-            SELECT id, user, email, descr, location, birthday, created_at FROM users
+            SELECT id, user, email, descr, location, birthday, created_at, avatar FROM users
             WHERE id=$id;
         SQL;
 
@@ -100,6 +100,10 @@ class UserModel
             UPDATE users SET pwd=:pwd WHERE id=$id;
         SQL;
 
+        $updateAvatar = <<<SQL
+            UPDATE users SET avatar=:avatar WHERE id=$id;
+        SQL;
+
         try {
             // I prefer a switch here, in case other options are added later
             switch ($data['_update']) {
@@ -114,6 +118,12 @@ class UserModel
                     $pwd = password_hash($data['pwd'], PASSWORD_BCRYPT);
                     $statement = $this->pdo->prepare($changePwd);
                     $statement->bindParam(':pwd', $pwd, PDO::PARAM_STR);
+                    break;
+                case 'avatar':
+                    $extension = (pathinfo($data['avatar']['name']))['extension'];
+                    $path = $_SESSION['user'].'.'.$extension;
+                    $statement = $this->pdo->prepare($updateAvatar);
+                    $statement->bindParam(':avatar', $path, PDO::PARAM_STR);
                     break;
                 default:
                     return ['error' => 'Sorry, your data could not be saved'];
