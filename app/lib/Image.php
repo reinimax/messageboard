@@ -126,7 +126,7 @@ class Image
         switch ($this->type) {
             case 'gif': return imagegif($this->dest ?? $this->src, $filename);
             case 'jpg': return imagejpeg($this->dest ?? $this->src, $filename);
-            case 'png': return imagepng($this->dest ?? $this->src, $filename);
+            case 'png': return imagepng($this->dest ?? $this->src, $filename, 0, null);
         }
         return false;
     }
