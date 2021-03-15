@@ -12,6 +12,8 @@ if (!empty($data['error'])) {
 
 if (Session::init()->checkLogin()) {
     include ROOT.'/views/inc/create.php';
+} else {
+    include ROOT.'/views/inc/cta.php';
 }
 
 // create a class for making avatars
