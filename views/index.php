@@ -72,3 +72,5 @@ foreach ($data['data'] as $key => $item) {
     // echo '<div class="card-footer">Footer</div>';
     echo '</div>';
 }
+
+include ROOT.'/views/inc/pagination.php';
