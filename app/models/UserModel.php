@@ -168,4 +168,32 @@ class UserModel
         return ['success' => 'Your profile has been successfully deleted'];
         ;
     }
+
+    /**
+     * Get the data of a user for display
+     * @param int $id The id of the user
+     * @return array/false On succes an array with the user data, on failure false
+     */
+    public function user($id)
+    {
+        $getUser = <<<SQL
+            SELECT id, user, descr, location, birthday, created_at, avatar FROM users
+            WHERE id=:id;
+        SQL;
+
+        $postcount = ['count' => $this->getNumOfPosts($id)];
+
+        try {
+            $statement = $this->pdo->prepare($getUser);
+            $statement->bindParam(':id', $id, PDO::PARAM_INT);
+            $statement->execute();
+            $result = $statement->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return false;
+        }
+        if (!$result) {
+            return false;
+        }
+        return array_merge($result, $postcount);
+    }
 }
