@@ -3,6 +3,8 @@
 use app\lib\Session;
 use app\traits\Avatar as TraitsAvatar;
 
+require_once ROOT.'/views/inc/pagination.php';
+
 if (!empty($data['success'])) {
     include ROOT.'/views/inc/success.php';
 }
@@ -22,13 +24,30 @@ class Avatar
     use TraitsAvatar;
 }
 
+// set the page
+if (isset($_GET['page'])) {
+    $tmp = (int) $_GET['page'];
+}
+$page = ($tmp >= 1) ? $tmp : 1;
+// if the GET parameter is too big, set $page to the last available page
+if ($page > $pages) {
+    $page = $pages;
+}
+
 /* echo '<pre>';
 var_dump($data['data']);
 echo '</pre>'; */
 
 echo '<h1>'.$data['title'].'</h1>';
 
-foreach ($data['data'] as $key => $item) {
+for ($i = ($page-1)*$postsPerPage; $i < $postsPerPage*$page; $i++) {
+    $key = (array_keys($data['data']))[$i];
+    $item = $data['data'][$key];
+    // break to loop if nor more results are found (this prevents the last page from breaking)
+    if (!isset($key) || !isset($item)) {
+        break;
+    }
+
     $date = (DateTime::createFromFormat('Y-m-d H:i:s', $item[0]['updated_at']))->format('D, j M Y, H:i');
     if ($item[0]['user'] === $_SESSION['user']) {
         // build edit button
@@ -73,4 +92,4 @@ foreach ($data['data'] as $key => $item) {
     echo '</div>';
 }
 
-include ROOT.'/views/inc/pagination.php';
+echo $pagination;
