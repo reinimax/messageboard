@@ -1,8 +1,17 @@
 <?php
 
+require_once ROOT.'/views/inc/pagination.php';
+
 echo '<h1>Your posts</h1>';
 
-foreach ($data['data'] as $key => $item) {
+for ($i = ($page-1)*$postsPerPage; $i < $postsPerPage*$page; $i++) {
+    $key = (array_keys($data['data']))[$i];
+    $item = $data['data'][$key];
+    // break to loop if nor more results are found (this prevents the last page from breaking)
+    if (!isset($key) || !isset($item)) {
+        break;
+    }
+
     $date = (DateTime::createFromFormat('Y-m-d H:i:s', $item[0]['updated_at']))->format('D, j M Y, H:i');
     // build edit button
     $edit = '<a href="/edit.php?id='.$key.'" class="btn py-0 px-1"><i class="fas fa-pencil-alt"></i></a>';
@@ -32,3 +41,5 @@ foreach ($data['data'] as $key => $item) {
     // echo '<div class="card-footer">Footer</div>';
     echo '</div>';
 }
+
+echo $pagination;
