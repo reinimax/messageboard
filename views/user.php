@@ -13,6 +13,7 @@
         DateTime::createFromFormat('Y-m-d', $data['data']['birthday'])->format('M jS, Y') :
         'Not specified'; ?></span></p>
         <p>Location: <span><?php echo $data['data']['location'] ?? 'Not specified'; ?></span></p>
+        <a href="/search.php?query=<?php echo $data['data']['user']?>&limit=user">Show all posts</a>
     </div>
 </div> 
 
