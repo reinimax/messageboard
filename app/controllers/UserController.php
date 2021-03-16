@@ -230,4 +230,32 @@ class UserController
             exit;
         }
     }
+
+    /**
+     * Display the profile of a user
+     * @return array/void Either returns the array with the data or redirects to index.php in case of an error
+     */
+    public function user()
+    {
+        if (!isset($_GET['id'])) {
+            $error= str_replace('.', '%2E', urlencode('User profile not found'));
+            header('Location:/index.php?error='.$error);
+            exit;
+        }
+        $id = (int) $_GET['id'];
+        $data = $this->model->user($id);
+        if (!is_array($data)) {
+            $error= str_replace('.', '%2E', urlencode('User profile not found'));
+            header('Location:/index.php?error='.$error);
+            exit;
+        }
+        $avatar = ['avatar' => $this->getAvatar($data['avatar'])];
+        return [
+            'title' => $data['user'].'\'s profile',
+            'content' => 'user.php',
+            'data' => [
+                'data' => array_merge($data, $avatar),
+            ]
+        ];
+    }
 }
