@@ -18,9 +18,7 @@
 
 <div class="form-group w-75 mx-auto">
     <label for="description">Description</label>
-    <textarea class="form-control" id="description" disabled>
-    <?php echo $data['data']['descr'] ?? 'Not specified'; ?>
-    </textarea>
+    <textarea class="form-control" id="description" disabled><?php echo $data['data']['descr'] ?? 'Not specified'; ?></textarea>
 </div>
     
 
