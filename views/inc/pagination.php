@@ -1,7 +1,7 @@
 <?php
 
 $postsTotal = count($data['data']);
-$postsPerPage = 1; // hardcoded for now. Later the user may change this number via a select or so
+$postsPerPage = 5; // hardcoded for now. Later the user may change this number via a select or so
 $pages = ceil($postsTotal/$postsPerPage);
 
 // set the page
