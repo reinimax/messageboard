@@ -24,16 +24,6 @@ class Avatar
     use TraitsAvatar;
 }
 
-// set the page
-if (isset($_GET['page'])) {
-    $tmp = (int) $_GET['page'];
-}
-$page = ($tmp >= 1) ? $tmp : 1;
-// if the GET parameter is too big, set $page to the last available page
-if ($page > $pages) {
-    $page = $pages;
-}
-
 /* echo '<pre>';
 var_dump($data['data']);
 echo '</pre>'; */
