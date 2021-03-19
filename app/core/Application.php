@@ -33,8 +33,8 @@ class Application
                     $result = $controller->{$this->routes[$method][$route][1]}();
                     $this->view->render($result);
                 } catch (\Error $e) {
-                    $title = 'Error '.$e->getCode();
-                    $message = $e->getMessage();
+                    $title = (PRODUCTION === false) ? 'Error '.$e->getCode() : null;
+                    $message = (PRODUCTION === false) ? $e->getMessage() : null;
                     $this->view->render([
                         'title' => 'Error',
                         'content' => 'error.php',
@@ -46,23 +46,27 @@ class Application
                 }
             } else {
                 // handle error
+                $title = (PRODUCTION === false) ? 'Controller not found' : null;
+                $message = (PRODUCTION === false) ? 'The controller for this route was not found' : null;
                 $this->view->render([
                     'title' => 'Error',
                     'content' => 'error.php',
                     'data' => [
-                        'error' => 'Controller not found',
-                        'errormsg' => 'The controller for this route was not found'
+                        'error' => $title,
+                        'errormsg' => $message
                     ]
                 ]);
             }
         } else {
             // handle error
+            $title = (PRODUCTION === false) ? 'Method/Route not found' : null;
+            $message = (PRODUCTION === false) ? 'The method '.$method.' or the route '.$route.' was not found' : null;
             $this->view->render([
                 'title' => 'Error',
                 'content' => 'error.php',
                 'data' => [
-                    'error' => 'Method/Route not found',
-                    'errormsg' => 'The method '.$method.' or the route '.$route.' was not found'
+                    'error' => $title,
+                    'errormsg' => $message
                 ]
             ]);
         }
