@@ -19,6 +19,8 @@ class PostController
      */
     public function index()
     {
+        $success = null;
+        $error = null;
         if (!empty($_GET)) {
             $gump = new \GUMP();
 
