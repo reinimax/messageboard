@@ -93,7 +93,7 @@ class Application
         $route = $_SERVER['REQUEST_URI'];
         $info = pathinfo($route);
         $path = $info['dirname'].'/'.$info['filename'];
-        return str_replace('\\', '', $path);
+        return str_replace(['\\', '//'], ['', '/'], $path);
     }
 
     /**
