@@ -5,6 +5,7 @@ $postsPerPage = (isset($_GET['ppp'])) ? ((int) $_GET['ppp']) : 5;
 $pages = ceil($postsTotal/$postsPerPage);
 
 // set the page
+$tmp = 1;
 if (isset($_GET['page'])) {
     $tmp = (int) $_GET['page'];
 }
