@@ -70,10 +70,21 @@ class HomeController
                         ];
                     } else {
                         $_POST = [];
-                        $success= urlencode('You are succesfully registered');
-                        // go to index
-                        header('Location:/index.php?success='.$success);
-                        exit;
+                        // Log the user in
+                        $result = $this->model->login($valid_data, false);
+                        if ($result === false) {
+                            return [
+                                'title' => 'Login',
+                                'content' => 'login.php',
+                                'data' => ['error' => 'Login not correct']
+                            ];
+                        } else {
+                            Session::init()->setLogin($result);
+                            $success= urlencode('You are succesfully registered');
+                            // go to index
+                            header('Location:/index.php?success='.$success);
+                            exit;
+                        }
                     }
                 }
             } else {
