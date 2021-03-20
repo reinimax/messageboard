@@ -116,6 +116,10 @@ class UserController
                         ]
                     ];
                 } else {
+                    // Set path to the old avatar that will be deleted later. This has to be done before modifying the database.
+                    if (isset($valid_data['avatar'])) {
+                        $oldPath = ROOT.'/uploads/avatars/'.$data['avatar'];
+                    }
                     // Update userdata
                     $result = $this->model->update($this->userId, $valid_data);
                     if (isset($result['error'])) {
@@ -138,6 +142,10 @@ class UserController
 
                         // if an avatar was uploaded, resize and save it
                         if (isset($valid_data['avatar'])) {
+                            // Delete previous avatar (to prevent multiple avatars with different extensions).
+                            // $oldPath was defined above before the DB was modified
+                            $this->deleteAvatar($oldPath);
+                            // save new one
                             $tmp = $valid_data['avatar']['tmp_name'];
                             $imageObj = new Image($tmp);
                             $imageObj->square(200)->save(ROOT.'/uploads/avatars/'.$data['avatar']);
@@ -257,5 +265,12 @@ class UserController
                 'data' => array_merge($data, $avatar),
             ]
         ];
+    }
+
+    protected function deleteAvatar($filepath)
+    {
+        if (file_exists($filepath) && !is_dir($filepath)) {
+            unlink($filepath);
+        }
     }
 }
