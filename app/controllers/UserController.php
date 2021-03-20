@@ -105,13 +105,14 @@ class UserController
 
                 $valid_data = $gump->run(array_merge($_POST, $_FILES));
                 $data = $this->model->settings($this->userId);
+                $avatar = ['avatar' => $this->getAvatar($data['avatar'])];
                 if ($gump->errors()) {
                     $errors = $gump->get_errors_array();
                     return [
                         'title' => 'About me',
                         'content' => 'settings.php',
                         'data' => [
-                            'data' => $data,
+                            'data' => array_merge($data, $avatar),
                             'errors' => $errors,
                         ]
                     ];
@@ -128,7 +129,7 @@ class UserController
                             'content' => 'settings.php',
                             'data' => [
                                 'error' => $result['error'],
-                                'data' => $data
+                                'data' => array_merge($data, $avatar)
                             ]
                         ];
                     } else {
@@ -195,13 +196,14 @@ class UserController
                 ]);
                 $valid_data = $gump->run($_POST);
                 $data = $this->model->settings($this->userId);
+                $avatar = ['avatar' => $this->getAvatar($data['avatar'])];
                 if ($gump->errors()) {
                     $errors = $gump->get_errors_array();
                     return [
                         'title' => 'About me',
                         'content' => 'settings.php',
                         'data' => [
-                            'data' => $data,
+                            'data' => array_merge($data, $avatar),
                             'errors' => $errors,
                         ]
                     ];
@@ -214,7 +216,7 @@ class UserController
                             'content' => 'settings.php',
                             'data' => [
                                 'error' => $result['error'],
-                                'data' => $data
+                                'data' => array_merge($data, $avatar)
                             ]
                         ];
                     } else {
