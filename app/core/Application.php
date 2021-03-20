@@ -35,9 +35,10 @@ class Application
                 } catch (\Error $e) {
                     $title = (PRODUCTION === false) ? 'Error '.$e->getCode() : null;
                     $message = (PRODUCTION === false) ? $e->getMessage() : null;
+                    $content = (PRODUCTION === false) ? 'error.php' : null;
                     $this->view->render([
                         'title' => 'Error',
-                        'content' => 'error.php',
+                        'content' => $content,
                         'data' => [
                             'error' => $title,
                             'errormsg' => $message
@@ -48,9 +49,10 @@ class Application
                 // handle error
                 $title = (PRODUCTION === false) ? 'Controller not found' : null;
                 $message = (PRODUCTION === false) ? 'The controller for this route was not found' : null;
+                $content = (PRODUCTION === false) ? 'error.php' : null;
                 $this->view->render([
                     'title' => 'Error',
-                    'content' => 'error.php',
+                    'content' => $content,
                     'data' => [
                         'error' => $title,
                         'errormsg' => $message
@@ -61,9 +63,10 @@ class Application
             // handle error
             $title = (PRODUCTION === false) ? 'Method/Route not found' : null;
             $message = (PRODUCTION === false) ? 'The method '.$method.' or the route '.$route.' was not found' : null;
+            $content = (PRODUCTION === false) ? 'error.php' : null;
             $this->view->render([
                 'title' => 'Error',
-                'content' => 'error.php',
+                'content' => $content,
                 'data' => [
                     'error' => $title,
                     'errormsg' => $message
