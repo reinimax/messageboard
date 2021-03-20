@@ -218,6 +218,12 @@ class UserController
                             ]
                         ];
                     } else {
+                        // delete avatar from file system
+                        $avatarPath = ROOT.'/uploads/avatars/'.$data['avatar'];
+                        if (file_exists($avatarPath) && !is_dir($avatarPath)) {
+                            $this->deleteAvatar($avatarPath);
+                        }
+
                         $_POST = [];
                         Session::init()->destroySession();
                         $success= str_replace('.', '%2E', urlencode($result['success']));
