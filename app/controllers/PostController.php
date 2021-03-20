@@ -36,7 +36,7 @@ class PostController
         // call model and return the retrieved data
         $data = $this->model->index();
         return [
-            'title' => 'Index',
+            'title' => 'Messageboard',
             'content' => 'index.php',
             'data' => [
                 'data' => $data,
@@ -81,7 +81,7 @@ class PostController
         }
         $count = count($data);
         return [
-            'title' => 'Index',
+            'title' => 'Your results',
             'content' => 'index.php',
             'data' => [
                 'data' => $data,
@@ -420,7 +420,7 @@ class PostController
                 return [
                     'title' => 'New tag',
                     'content' => 'createtag.php',
-                    'data' => ['error' => 'Post could not be saved']
+                    'data' => ['error' => 'Tag could not be saved']
                 ];
             }
         } else {
