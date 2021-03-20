@@ -43,7 +43,7 @@ for ($i = ($page-1)*$postsPerPage; $i < $postsPerPage*$page; $i++) {
         // build edit button
         $edit = '<a href="/edit.php?id='.$key.'" class="btn py-0 px-1"><i class="fas fa-pencil-alt"></i></a>';
         // build delete button
-        $delete =  '<form action="/delete.php?id='.$key.'" method="POST">';
+        $delete =  '<form action="/delete.php?id='.$key.'" method="POST" class="py-0">';
         $delete .= '<input type="hidden" name="_method" value="delete">';
         $delete .= '<button class="btn py-0 px-1" type="submit"><i class="fas fa-trash-alt"></i></button>';
         $delete .= '</form>';
