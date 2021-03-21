@@ -3,10 +3,10 @@
   <?php include ROOT.'/views/inc/search.php'; ?>
   <ul class="navbar-nav mx-5">
     <li class="nav-item">
-      <a class="nav-link btn btn-outline-info mx-2" href="/login">Login</a>
+      <a class="nav-link btn btn-outline-info mx-2" href="/login.php">Login</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link btn btn-outline-info mx-2" href="/register">Register</a>
+      <a class="nav-link btn btn-outline-info mx-2" href="/register.php">Register</a>
     </li>
   </ul>
 </nav>
