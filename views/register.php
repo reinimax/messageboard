@@ -19,6 +19,7 @@ use app\lib\Session;
     </div>
     <div class="form-group">
         <label for="email">Email *</label>
+        <div><small class="text-secondary"><strong>Note: </strong>This is a portfolio project. You are not required to enter a real email address. Something like x@x.x suffices to try this project out. Anyway, your data will not be passed to anyone and you can always delete your profile.</small></div>
         <input type="email" class="form-control <?php echo ($data['errors']['email']) ? 'is-invalid' : ''; ?>" 
         id="email" name="email" value="<?php echo $_POST['email'] ?? ''; ?>" required placeholder="Your email ...">
         <div class="invalid-feedback"><?php echo $data['errors']['email'] ?? ''; ?></div>
