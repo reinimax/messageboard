@@ -206,7 +206,7 @@ class PostModel
     /**
      * Gets the data of a post
      * @param int $id The id of the post
-     * @return array
+     * @return array with the data on success, an array with the error message on failure
      */
     public function edit($id)
     {
@@ -294,7 +294,7 @@ class PostModel
 
     /**
      * Get a list of all tags
-     * @return array
+     * @return array An associative array with the tags on success, an empty array on failure
      */
     public function getTags()
     {
