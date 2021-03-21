@@ -35,7 +35,7 @@ class HomeController
                 $uppercase = '/[A-Z]/';
                 $digit = '/[0-9]/';
                 $gump->validation_rules([
-                    'user' => 'required|alpha_numeric_dash|max_len,100|min_len,2',
+                    'user' => 'required|alpha_numeric_dash|max_len,100|min_len,2|doesnt_contain_list,default',
                     'email' => 'required|valid_email',
                     'pwd' => 'required|max_len,64|min_len,8|equalsfield,pwdrepeat|regex,'.$lowercase.
                     '|regex,'.$uppercase.'|regex,'.$digit
