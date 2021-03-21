@@ -140,6 +140,7 @@ class="needs-validation" novalidate>
         <div class="invalid-feedback"><?php echo $data['errors']['confirmdelete'] ?? ''; ?></div> 
     </div>
     <div><strong>Warning: </strong>This action cannot be undone</div>
+    <div><strong>Note: </strong>Your posts are not deleted automatically. Please delete them manually before deleting your account, if you wish so.</div>
     <input type="hidden" name="_token" value="<?php echo $csrf; ?>">
     <input type="hidden" name="_method" value="delete">
     <div class="form-group">
