@@ -128,16 +128,16 @@ class UserModel
                 default:
                     return ['error' => 'Sorry, your data could not be saved'];
             }
-
             $statement->execute();
+
             if ($statement->rowCount() === 0) {
                 return ['error' => 'Sorry, your data could not be saved'];
             }
         } catch (PDOException $e) {
-            return ['error' => $e->getMessage()];
+            $error = (PRODUCTION === false) ? $e->getMessage() : 'Sorry, your data could not be saved';
+            return ['error' => $error];
         }
         return ['success' => 'You successfully updated your profile'];
-        ;
     }
 
     /**
@@ -163,10 +163,10 @@ class UserModel
                 return ['error' => 'Sorry, something went wrong'];
             }
         } catch (PDOException $e) {
-            return ['error' => $e->getMessage()];
+            $error = (PRODUCTION === false) ? $e->getMessage() : 'Sorry, something went wrong';
+            return ['error' => $error];
         }
         return ['success' => 'Your profile has been successfully deleted'];
-        ;
     }
 
     /**
