@@ -26,6 +26,10 @@ if (Session::init()->checkLogin()) {
 {content}
 </main>
 
+<footer class="container-fluid bg-light p-4 mt-5" id="site-footer">
+    <div class="container text-center">Made by <a href="https://github.com/reinimax/" target="_blank"><i class="fab fa-github"></i>reinimax</a>, 2021.</div>
+</footer>
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
 </body>
