@@ -52,7 +52,7 @@ class HomeModel
      */
     public function login($data, $isEmail)
     {
-        // Cehck if username or email exists
+        // Check if username or email exists
         $loginUserName = <<<SQL
             SELECT id, user, email, pwd FROM users WHERE user=:user;
         SQL;
