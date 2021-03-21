@@ -61,8 +61,9 @@ for ($i = ($page-1)*$postsPerPage; $i < $postsPerPage*$page; $i++) {
     $avatar = (new Avatar())->getAvatar($item[0]['avatar']);
 
     // build username: plain text when logged out, otherwise a link to the profile
-    $username = (Session::init()->checkLogin()) ? '<a class="ml-1" href="/user.php?id='.$item[0]['id'].'">'.$item[0]['user'].
-    '</a>' : $item[0]['user'];
+    $user = $item[0]['user'] ?? 'deleted user';
+    $username = (Session::init()->checkLogin() && !empty($item[0]['user'])) ?
+    '<a class="ml-1" href="/user.php?id='.$item[0]['id'].'">'.$user.'</a>' : $user;
 
     echo '<div class="card my-3">';
     echo '<div class="card-header">';
