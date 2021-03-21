@@ -85,6 +85,9 @@ class UserModel
      */
     public function update($id, $data)
     {
+        // Since $id comes from the Session, and the Session gets it directly from the
+        // database, it's not necessary to check it again here.
+
         // if the user wants to change the password, check if the old password is correct
         if ($data['_update'] === 'pwd') {
             if ($this->checkPwd($id, $data['confirm']) === false) {
@@ -148,6 +151,9 @@ class UserModel
      */
     public function delete($id, $data)
     {
+        // Since $id comes from the Session, and the Session gets it directly from the
+        // database, it's not necessary to check it again here.
+
         // check if the password is correct
         if ($this->checkPwd($id, $data['confirmdelete']) === false) {
             return ['error' => 'Wrong password'];
