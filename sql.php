@@ -42,13 +42,13 @@ try {
 $createPosts = <<<SQL
     CREATE TABLE IF NOT EXISTS posts(
         id INT UNSIGNED AUTO_INCREMENT,
-        user_id INT UNSIGNED NOT NULL,
+        user_id INT UNSIGNED,
         title VARCHAR(100) NOT NULL,
         content TEXT NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         PRIMARY KEY(id),
-        FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL,
         FULLTEXT(title,content)
     )
 SQL;
