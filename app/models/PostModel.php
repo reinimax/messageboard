@@ -26,7 +26,7 @@ class PostModel
             SELECT posts.id, posts.title, posts.content, posts.created_at, posts.updated_at, users.id, users.user, users.avatar, tags.tag FROM posts
             LEFT JOIN posts_tags AS pt ON (posts.id = pt.post_id)
             LEFT JOIN tags ON (pt.tag_id = tags.id)
-            JOIN users ON (posts.user_id = users.id) 
+            LEFT JOIN users ON (posts.user_id = users.id) 
             ORDER BY posts.updated_at DESC;
         SQL;
 
@@ -53,7 +53,7 @@ class PostModel
             SELECT posts.id, posts.title, posts.content, posts.created_at, posts.updated_at, users.id, users.user, users.avatar, tags.tag FROM posts
             LEFT JOIN posts_tags AS pt ON (posts.id = pt.post_id)
             LEFT JOIN tags ON (pt.tag_id = tags.id) 
-            JOIN users ON (posts.user_id = users.id) WHERE MATCH(posts.title) AGAINST(:query)
+            LEFT JOIN users ON (posts.user_id = users.id) WHERE MATCH(posts.title) AGAINST(:query)
             ORDER BY posts.updated_at DESC;
         SQL;
 
@@ -69,7 +69,7 @@ class PostModel
             SELECT posts.id, posts.title, posts.content, posts.created_at, posts.updated_at, users.id, users.user, users.avatar, tags.tag FROM posts
             LEFT JOIN posts_tags AS pt ON (posts.id = pt.post_id)
             LEFT JOIN tags ON (pt.tag_id = tags.id) 
-            JOIN users ON (posts.user_id = users.id) WHERE MATCH(posts.title, posts.content) AGAINST(:query) OR
+            LEFT JOIN users ON (posts.user_id = users.id) WHERE MATCH(posts.title, posts.content) AGAINST(:query) OR
             MATCH(users.user) AGAINST(:query) OR posts.id IN (
                 SELECT posts.id FROM posts
                 LEFT JOIN posts_tags AS pt ON (posts.id = pt.post_id)
@@ -82,7 +82,7 @@ class PostModel
             SELECT posts.id, posts.title, posts.content, posts.created_at, posts.updated_at, users.id, users.user, users.avatar, tags.tag FROM posts
             LEFT JOIN posts_tags AS pt ON (posts.id = pt.post_id)
             LEFT JOIN tags ON (pt.tag_id = tags.id) 
-            JOIN users ON (posts.user_id = users.id) WHERE posts.id IN (
+            LEFT JOIN users ON (posts.user_id = users.id) WHERE posts.id IN (
                 SELECT posts.id FROM posts
                 LEFT JOIN posts_tags AS pt ON (posts.id = pt.post_id)
                 LEFT JOIN tags ON (pt.tag_id = tags.id) 
