@@ -33,7 +33,7 @@ echo '<h1>'.$data['title'].'</h1>';
 for ($i = ($page-1)*$postsPerPage; $i < $postsPerPage*$page; $i++) {
     $key = (array_keys($data['data']))[$i];
     $item = $data['data'][$key];
-    // break to loop if nor more results are found (this prevents the last page from breaking)
+    // break the loop if no more results are found (this prevents the last page from breaking)
     if (!isset($key) || !isset($item)) {
         break;
     }
