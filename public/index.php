@@ -7,7 +7,7 @@ define('ROOT', dirname(__DIR__));
  * Set this variable to false for development in order to enable more detailed error messages,
  * and to true for production to enable more general error messages and disable PHP error reporting
  */
-define('PRODUCTION', false);
+define('PRODUCTION', true);
 
 if (PRODUCTION === false) {
     error_reporting(E_ALL);
