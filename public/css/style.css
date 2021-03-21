@@ -6,3 +6,8 @@ main {
     flex-basis: 100px;
     flex-grow: 1;
 }
+
+pre {
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 1rem;
+}
