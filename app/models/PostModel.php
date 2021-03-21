@@ -17,8 +17,8 @@ class PostModel
     }
 
     /**
-     * Retrieve the newest 10 posts
-     * @return array/false
+     * Retrieve the posts, newest first
+     * @return array/false The posts grouped by post id on success, false on failure
      */
     public function index()
     {
@@ -111,7 +111,7 @@ class PostModel
 
     /**
      * Retrieve all posts of the current user
-     * @return array/false
+     * @return array/false An array of the posts grouped by post id on success, FALSE on failure
      */
     public function show()
     {
