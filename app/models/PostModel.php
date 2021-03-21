@@ -157,7 +157,8 @@ class PostModel
             $statement->execute();
             $post_id = $this->pdo->lastInsertId();
         } catch (PDOException $e) {
-            return ['error' => $e->getMessage()];
+            $error = (PRODUCTION === false) ? $e->getMessage() : 'Sorry, your message could not be saved';
+            return ['error' => $error];
         }
 
         // save the connection between the post and the tag
@@ -172,7 +173,8 @@ class PostModel
                     $statement->execute();
                 }
             } catch (PDOException $e) {
-                return ['error' => $e->getMessage()];
+                $error = (PRODUCTION === false) ? $e->getMessage() : 'Sorry, your message could not be saved';
+                return ['error' => $error];
             }
         }
 
@@ -195,7 +197,8 @@ class PostModel
             $statement->bindParam(':id', $id, PDO::PARAM_INT);
             $statement->execute();
         } catch (PDOException $e) {
-            return ['error' => $e->getMessage()];
+            $error = (PRODUCTION === false) ? $e->getMessage() : 'Message could not be deleted';
+            return ['error' => $error];
         }
         return ['success' => 'Message deleted'];
     }
@@ -220,7 +223,8 @@ class PostModel
             $statement->execute();
             $result = $statement->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            return ['error' => $e->getMessage()];
+            $error = (PRODUCTION === false) ? $e->getMessage() : 'Sorry, we couldn\'t find this post';
+            return ['error' => $error];
         }
         if ($result === false) {
             return ['error' => 'Sorry, we couldn\'t find this post'];
@@ -248,7 +252,8 @@ class PostModel
             $statement->execute();
             $result = $statement->rowCount();
         } catch (PDOException $e) {
-            return ['error' => $e->getMessage()];
+            $error = (PRODUCTION === false) ? $e->getMessage() : 'Sorry, we couldn\'t find this post';
+            return ['error' => $error];
         }
         if ($result === 0) {
             return ['error' => 'Sorry, we couldn\'t find this post'];
@@ -257,19 +262,20 @@ class PostModel
         // delete all connections of the updated post in the pivot table
         if (!empty($data['tag'])) {
             $deletePostTags = <<<SQL
-            DELETE FROM posts_tags WHERE post_id=:id
+                DELETE FROM posts_tags WHERE post_id=:id
             SQL;
             try {
                 $statement = $this->pdo->prepare($deletePostTags);
                 $statement->bindParam(':id', $id, PDO::PARAM_INT);
                 $statement->execute();
             } catch (PDOException $e) {
-                return ['error' => $e->getMessage()];
+                $error = (PRODUCTION === false) ? $e->getMessage() : 'Sorry, something went wrong';
+                return ['error' => $error];
             }
 
             // save all connections of the updated post in the pivot table
             $savePostTag = <<<SQL
-            INSERT INTO posts_tags (post_id, tag_id) VALUES (:post_id, :tag_id);
+                INSERT INTO posts_tags (post_id, tag_id) VALUES (:post_id, :tag_id);
             SQL;
             try {
                 $statement = $this->pdo->prepare($savePostTag);
@@ -279,10 +285,10 @@ class PostModel
                     $statement->execute();
                 }
             } catch (PDOException $e) {
-                return ['error' => $e->getMessage()];
+                $error = (PRODUCTION === false) ? $e->getMessage() : 'Sorry, something went wrong';
+                return ['error' => $error];
             }
         }
-
         return ['success' => 'You succesfully updated your post'];
     }
 
@@ -330,7 +336,8 @@ class PostModel
             if ($e->getCode() == 23000) {
                 return ['error' => 'This tag already exists!'];
             }
-            return ['error' => $e->getMessage()];
+            $error = (PRODUCTION === false) ? $e->getMessage() : 'Could not create new tag';
+            return ['error' => $error];
         }
         return ['success' => 'Tag sucessfully created'];
     }
