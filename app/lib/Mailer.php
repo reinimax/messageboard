@@ -20,7 +20,7 @@ class Mailer
 
         try {
             //Server settings
-            $this->instance->SMTPDebug = SMTP::DEBUG_SERVER;
+            $this->instance->SMTPDebug = SMTP::DEBUG_OFF;
             $this->instance->isSMTP();
             $this->instance->Host       = $config['host'];
             $this->instance->SMTPAuth   = true;
