@@ -86,8 +86,12 @@ class HomeController
                             // send welcome email
                             $recipient = [$valid_data['email'], $valid_data['user']];
                             $subject = 'Welcome to the message board!';
-                            $body = '<strong>This is a test.</strong>';
-                            $altBody = 'This is a test';
+                            // define title and content for the html template
+                            $title = 'Welcome to the message board!';
+                            $content = 'We\'re glad that you\'re on board!';
+                            $tmpBody = file_get_contents(ROOT.'/views/mail/general.html');
+                            $body = str_replace(['{title}', '{content}'], [$title, $content], $tmpBody);
+                            $altBody = "$title\n$content";
                             $mailStatus = $this->mailer->send($recipient, $subject, $body, $altBody);
                             if (!$mailStatus) {
                                 // One could get the errors and do something with them, but this is not really necessary here.
