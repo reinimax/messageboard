@@ -2,16 +2,19 @@
 
 namespace app\controllers;
 
+use app\lib\Mailer;
 use app\lib\Session;
 use app\models\HomeModel;
 
 class HomeController
 {
     protected $model;
+    protected $mailer;
 
     public function __construct()
     {
         $this->model = new HomeModel();
+        $this->mailer =  new Mailer();
     }
 
     /**
@@ -80,7 +83,19 @@ class HomeController
                             ];
                         } else {
                             Session::init()->setLogin($result);
-                            $success= urlencode('You are succesfully registered');
+                            // send welcome email
+                            $recipient = [$valid_data['email'], $valid_data['user']];
+                            $subject = 'Welcome to the message board!';
+                            $body = '<strong>This is a test.</strong>';
+                            $altBody = 'This is a test';
+                            $mailStatus = $this->mailer->send($recipient, $subject, $body, $altBody);
+                            if (!$mailStatus) {
+                                // One could get the errors and do something with them, but this is not really necessary here.
+                                // The most useful thing would be to log them instead of displaying them somewhere.
+                                // $mailerror = $this->mailer->getErrors();
+                            }
+
+                            $success= urlencode('You are succesfully registered!');
                             // go to index
                             header('Location:/index.php?success='.$success);
                             exit;
