@@ -5,6 +5,8 @@ namespace app\controllers;
 use app\lib\Mailer;
 use app\lib\Session;
 use app\models\HomeModel;
+use DateInterval;
+use DateTime;
 
 class HomeController
 {
@@ -208,5 +210,114 @@ class HomeController
         Session::init()->destroySession();
         header('Location:/');
         exit;
+    }
+
+    public function forgotpwd()
+    {
+        if (!empty($_POST)) {
+            if (hash_equals(Session::init()->getCsrfToken(), $_POST['_token'])) {
+                // Validation
+                $gump = new \GUMP();
+
+                $gump->filter_rules(['email' => 'trim|sanitize_email']);
+
+                $gump->validation_rules(['email' => 'required|valid_email']);
+
+                $valid_data = $gump->run($_POST);
+
+                if ($gump->errors()) {
+                    $errors = $gump->get_errors_array();
+                    return [
+                        'title' => 'Forgot Password',
+                        'content' => 'forgotpwd.php',
+                        'data' => ['errors' => $errors]
+                    ];
+                } else {
+                    $_POST = [];
+                    // Check if email exists in the DB (and pull also the username out of the DB to send it)
+                    $result = $this->model->forgotpwd($valid_data['email']);
+
+                    if (!$result) {
+                        // If the email doesn't exist, send a notification that this email isn't registered here
+                        $recipient = $valid_data['email'];
+                        $subject = 'Password reset for reinimax\' messageboard';
+                        // define title and content for the html template
+                        $title = 'Password reset for reinimax\' messageboard';
+                        $content = '
+                            <p>Hello,</p>
+                            <br>
+                            <p>We received a request to reset the password associated with the email address '.$valid_data['email'].' here at reinimax\' messageboard. Unfortunately this email address isn\'t registered with us.</p>
+                            <p><strong>What does this mean for you?</strong></p>
+                            <p>No changes have been made to your account. Proceed as follows:</p>
+                            <p>If you didn\'t make this request, please ignore this email.</p>
+                            <p>If you requested a password change, you may have registered under a different email address. Please go back to our site and <a href="'.URL.'/forgotpwd.php">request a password change</a> using the email you used to register your account.</p>
+                            <p>If you have any questions, please <a href="mailto:'.EMAIL_ADDR.'">contact us</a></p>
+                            <br>
+                            <p>Regards,</p>
+                            <p>reinimax\' messageboard</p>
+                            ';
+                        $tmpBody = file_get_contents(ROOT.'/views/mail/general.html');
+                        $body = str_replace(['{title}', '{content}'], [$title, $content], $tmpBody);
+                        $altContent = strip_tags(str_replace(['<br>', '</p>'], ["\n", "\n"], $content));
+                        // replace multipe spaces and tabs
+                        $altContent = preg_replace('/ +|\t+/u', " ", $altContent);
+                        // replace spaces at the beginning of a new line
+                        $altContent = preg_replace('/\n /u', "", $altContent);
+                        $altBody = "$title\n$altContent";
+                        $mailStatus = $this->mailer->send($recipient, $subject, $body, $altBody);
+                        if (!$mailStatus) {
+                            // One could get the errors and do something with them, but this is not really necessary here.
+                            // The most useful thing would be to log them instead of displaying them somewhere.
+                            // $mailerror = $this->mailer->getErrors();
+                        }
+                    } else {
+                        // If the email exists, send an email with the reset link
+                        // Create a hash and save it and the current time in the session
+                        $hash = bin2hex(random_bytes(32));
+                        $current = new DateTime();
+                        $validUntil = new DateInterval('PT30S');
+                        $expiration = $current->add($validUntil);
+
+                        $_SESSION['pwd_reset_hash'] = $hash;
+                        $_SESSION['pwd_reset_expiration'] = $expiration;
+
+                        //CONTINUE HERE
+                        /* $recipient = [$valid_data['email'], $valid_data['user']];
+                        $subject = 'Welcome to the message board!';
+                        // define title and content for the html template
+                        $title = 'Welcome to the message board!';
+                        $content = 'We\'re glad that you\'re on board!';
+                        $tmpBody = file_get_contents(ROOT.'/views/mail/general.html');
+                        $body = str_replace(['{title}', '{content}'], [$title, $content], $tmpBody);
+                        $altBody = "$title\n$content";
+                        $mailStatus = $this->mailer->send($recipient, $subject, $body, $altBody);
+                        if (!$mailStatus) {
+                            // One could get the errors and do something with them, but this is not really necessary here.
+                            // The most useful thing would be to log them instead of displaying them somewhere.
+                            // $mailerror = $this->mailer->getErrors();
+                        } */
+                    }
+                    //Return success message
+                    return [
+                        'title' => 'Forgot Password',
+                        'content' => 'forgotpwd.php',
+                        'data' => ['success' => 'An email was sent to '.$valid_data['email'].'. Please check your inbox and follow the instructions in the email.']
+                    ];
+                }
+            } else {
+                // if CSRF Validation failed
+                return [
+                    'title' => 'Forgot Password',
+                    'content' => 'forgotpwd.php',
+                    'data' => ['error' => 'The action failed. Please try again later.']
+                ];
+            }
+        } else {
+            // if $_POST is empty
+            return [
+                'title' => 'Forgot Password',
+                'content' => 'forgotpwd.php'
+            ];
+        }
     }
 }
