@@ -25,4 +25,5 @@ use app\lib\Session;
     <div class="form-group">
         <input type="submit" class="btn btn-primary w-100" value="Login">
     </div>
+    <div class="text-center"><a href="/forgotpwd.php">I forgot my password</a></div>
 </form>
