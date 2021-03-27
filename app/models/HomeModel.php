@@ -90,4 +90,29 @@ class HomeModel
         // per default, return false
         return false;
     }
+
+    /**
+     * Checks if an email exists in table users
+     * @param string $email The email the user entered
+     * @return string/bool Returns the associated username if the email exists, otherwise FALSE
+     */
+    public function forgotpwd(string $email)
+    {
+        $checkEmail = <<<SQL
+            SELECT user FROM TABLE users WHERE email=:email;
+        SQL;
+
+        try {
+            $statement = $this->pdo->prepare($checkEmail);
+            $statement->bindParam(':email', $email, PDO::PARAM_STR);
+            $statement->execute();
+            $result = $statement->fetchColumn();
+        } catch (PDOException $e) {
+            return false;
+        }
+        if (!$result) {
+            return false;
+        }
+        return $result;
+    }
 }
