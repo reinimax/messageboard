@@ -27,3 +27,4 @@ $app->registerDelete('/settings', [app\controllers\UserController::class, 'delet
 $app->registerGet('/user', [app\controllers\UserController::class, 'user']);
 
 $app->registerGet('/forgotpwd', [app\controllers\HomeController::class, 'forgotpwd']);
+$app->registerPut('/forgotpwd', [app\controllers\HomeController::class, 'forgotpwd']);
