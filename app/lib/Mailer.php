@@ -44,7 +44,7 @@ class Mailer
 
     /**
      * Send an email
-     * @param array $recipient An indexed array containing the email address and the username of the recipient
+     * @param mixed $recipient Either a string or an indexed array containing the email address and the username of the recipient
      * @param string $subject The subject
      * @param string $body The HTML message as string
      * @param string $altBody The alternative (non HTML) message
@@ -52,12 +52,16 @@ class Mailer
      * @param array $replyTo [optional] An indexed array containing the email address and name to which to reply
      * @return bool TRUE on success, FALSE on failure
      */
-    public function send(array $recipient, string $subject, string $body, string $altBody, array $from=
-    ['messageboard@test.com', 'reinimax\' Messageboard'], array $replyTo=['messageboard@test.com', 'reinimax\' Messageboard'])
+    public function send($recipient, string $subject, string $body, string $altBody, array $from=
+    [EMAIL_ADDR, EMAIL_NAME], array $replyTo=[EMAIL_ADDR, EMAIL_NAME])
     {
         try {
             $this->instance->setFrom($from[0], $from[1]);
-            $this->instance->addAddress($recipient[0], $recipient[1]);
+            if (is_array($recipient)) {
+                $this->instance->addAddress($recipient[0], $recipient[1]);
+            } else {
+                $this->instance->addAddress($recipient);
+            }
             $this->instance->addReplyTo($replyTo[0], $replyTo[1]);
 
             //Content
